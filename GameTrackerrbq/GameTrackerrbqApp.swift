@@ -9,9 +9,18 @@ import SwiftUI
 
 @main
 struct GameTrackerrbqApp: App {
+    @StateObject var sm = StateManager()
+    @StateObject var boards = Boards()
+    @StateObject var games = Games()
+    @StateObject var players = Players()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+//            GameEntryView()
+            MenuDriver()
+                .environmentObject(sm)
+                .environmentObject(boards)
+                .environmentObject(games)
+                .environmentObject(players)
         }
     }
 }
