@@ -36,29 +36,31 @@ struct MenuDriver: View {
             VStack(spacing: 0) {
                 PopoverBarView(isActive: .constant(true), title: "Game Tracker \(returnedMessage)", showBackButton: false)
                 Text(sm.containerEnvironment)
-                VStack {
-                    switch sm.openingTabNumber {
-                    case 1:
-                    GameEntryView().tabItem { Text("New Game") }.tag(1)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .modifier(BackgroundGradientViewModifier())
-
-                    case 2:
-                        PlayersGamesView().tabItem  { Text("Reporting") }.tag(2)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .modifier(BackgroundGradientViewModifier())
-                    case 3:
-                        // MaintenanceView
-
-                        MaintenanceView().tabItem  { Text("Maintenance") }.tag(3)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .modifier(BackgroundGradientViewModifier())
-
-                    default:
-                        LoginView()
+                if !sm.isLoading {
+                    VStack {
+                        switch sm.openingTabNumber {
+                        case 1:
+                            GameEntryView().tabItem { Text("New Game") }.tag(1)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .modifier(BackgroundGradientViewModifier())
+                            
+                        case 2:
+                            PlayersGamesView().tabItem  { Text("Reporting") }.tag(2)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .modifier(BackgroundGradientViewModifier())
+                        case 3:
+                            // MaintenanceView
+                            
+                            MaintenanceView().tabItem  { Text("Maintenance") }.tag(3)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .modifier(BackgroundGradientViewModifier())
+                            
+                        default:
+                            LoginView()
+                        }
+                        
+                        
                     }
-
-
                 }
 
             Spacer()
@@ -139,20 +141,22 @@ extension MenuDriver {
                 returnedMessage = rtnMessage
                 players.sectionDictionary = [:]
                 players.sectionDictionary = players.getSectionedDictionary()
+
+                boards.fetchAll() { rtnMessage in
+                    returnedMessage = rtnMessage
+                    boards.sectionDictionary = [:]
+                    boards.sectionDictionary = boards.getSectionedDictionary()
+
+                    games.fetchAll() { rtnMessage in
+                        returnedMessage = rtnMessage
+                        games.sectionDictionary = [:]
+                        games.sectionDictionary = games.getSectionedDictionary()
+                        sm.isLoading = false
+                    }
+                }
             }
-            boards.fetchAll() { rtnMessage in
-                returnedMessage = rtnMessage
-                boards.sectionDictionary = [:]
-                boards.sectionDictionary = boards.getSectionedDictionary()
-            }
-//            games.fetchAll() { rtnMessage in
-//                returnedMessage = rtnMessage
-//                games.sectionDictionary = [:]
-//                games.sectionDictionary = games.getSectionedDictionary()
-//            }
             hasBeenStarted.toggle()
             // TODO this is not yet turned off somewhere else
-            sm.isLoading = false
         }
     }
 }

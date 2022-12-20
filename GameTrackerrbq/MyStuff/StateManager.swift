@@ -21,7 +21,7 @@ class StateManager: ObservableObject {
                 gradient = Gradient(colors: [Color(gradientDefaults[0]), Color(gradientDefaults[1])])
                 gradientReversed = Gradient(colors: [Color(gradientDefaults[1]), Color(gradientDefaults[0])])
     }
-    @Published var isLoading = false
+    @Published var isLoading = true
     @Published var isInternetAvailable = false
     @Published var openingTabNumber = 1
     @Published var containerEnvironment = ""

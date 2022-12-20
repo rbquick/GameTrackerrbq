@@ -9,21 +9,13 @@ import SwiftUI
 import AlertKit
 
 struct GameEntryView: View {
-    @State private var board: String = "1"
-    @State private var boardID: Int64 = 0
+
     @State private var winner: String = "1"
     @State private var winnerID: Int64 = 0
     @State private var datePlayed: Date = Date()
-    @State private var player1: String = "38"
-    @State private var player1ID: Int64 = 0
     @State private var score1: Double = 0
-    @State private var player2: String = "1"
-    @State private var player2ID: Int64 = 0
     @State private var score2: Double = 0
-    @State private var rubbersPlayer1Today = 0
-    @State private var rubbersPlayer2Today = 0
-    @State private var rubbersPlayer1Total = 0
-    @State private var rubbersPlayer2Total = 0
+
 
     let pickerWidth = 260
 
@@ -33,75 +25,30 @@ struct GameEntryView: View {
     // ex: select a player1, it will not show in the playr2 list
     var listPlayer1: [Player] {
         return players.players.filter {
-            String($0.myID) != player2
+            $0.myID != games.player2ID
         }
     }
 
     var listPlayer2: [Player] {
         return players.players.filter {
-            String($0.myID) != player1
+            $0.myID != games.player1ID
         }
     }
     @State private var pickedGameWinner: String = ""
     @State private var myBoard: Board = Board(Name: "Euchre", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 10, myID: 1)!
-    var listGames: [Game] {
-        if player1 == "0" || player2 == "0" {
-            return games.games.filter {
-                $0.BoardID == boardID
-                && (( $0.Player1ID == player1ID || $0.Player1ID == player2ID )
-                    || ( $0.Player2ID == player1ID || $0.Player2ID == player2ID) )
-            }
-        } else {
-            return games.games.filter {
-                $0.BoardID == boardID
-                && ( $0.Player1ID == player1ID || $0.Player1ID == player2ID )
-                && ( $0.Player2ID == player1ID || $0.Player2ID == player2ID )
-            }
-        }
-    }
-    var lastDate: Date {
-        if listGames.count > 0 {
-            return listGames[0].DatePlayed
-        } else {
-            return Date()
-        }
-    }
-    var todayGames: [Game] {
-        return listGames.filter { game in
-            Calendar.current.isDate( game.DatePlayed, equalTo: lastDate, toGranularity: .day)
-        }
-    }
-    var player1TodayGamesWon: [Game] {
-        return todayGames.filter { game in
-            player1ID == game.WinnerID
-        }
-    }
-    var player2TodayGamesWon: [Game] {
-        return todayGames.filter { game in
-            player2ID == game.WinnerID
-        }
-    }
-    var player1TotalGamesWon: [Game] {
-        return listGames.filter { game in
-            player1ID == game.WinnerID
-        }
-    }
-    var player2TotalGamesWon: [Game] {
-        return listGames.filter { game in
-            player2ID == game.WinnerID
-        }
-    }
+
+
     @State private var myGame: Game = Game(BoardID: 0, Board: "", DatePlayed: Date(), WinnerID: 0, Player1ID: 0, Score1: 0, Player2ID: 0, Score2: 0, myID: 0)!
     var myPlayers: [Player] {
         return players.players.filter {
-            String($0.myID) == player1 || String($0.myID) == player2
+            $0.myID == games.player1ID || $0.myID == games.player2ID
         }
     }
     @State private var GameEntryEditingIdx: Int = 0
     @State private var GameEntryShowing: Bool = false
     @State private var GameEntryNewGame: Bool = false
     private var GameEntryCanShow: Bool {
-        if player1.isEmpty || player2.isEmpty {
+        if games.player1.isEmpty || games.player2.isEmpty {
             return false
         } else {
             return true
@@ -148,18 +95,14 @@ struct GameEntryView: View {
                                 VStack {
                                     Text("Todays Statistics")
                                         .fontWeight(.bold)
-                                    Text("Games Played: \(todayGames.count)")
+                                    Text("Games Played: \(games.todayGames.count)")
                                         .fontWeight(.bold)
-                                    Text("\(players.getName(myID: Int64(player1) ?? 802)) won: \(player1TodayGamesWon.count)")
-                                    Text("\(players.getName(myID: Int64(player2) ?? 803)) won: \(player2TodayGamesWon.count)")
+                                    Text("\(players.getName(myID: games.player1ID)) won: \(games.player1TodayGamesWon.count)")
+                                    Text("\(players.getName(myID: games.player2ID)) won: \(games.player2TodayGamesWon.count)")
                                     Text("Rubbers won")
                                         .fontWeight(.bold)
-                                    Text("\(players.getName(myID: Int64(player1) ?? 802)) won: \(rubbersPlayer1Today)")
-                                        .onAppear() {
-                                            CountRubbers()
-                                        }
-
-                                    Text("\(players.getName(myID: Int64(player2) ?? 803)) won: \(rubbersPlayer2Today)")
+                                    Text("\(players.getName(myID: games.player1ID)) won: \(games.rubbersPlayer1Today)")
+                                    Text("\(players.getName(myID: games.player2ID)) won: \(games.rubbersPlayer2Today)")
                                 }.frame(width: geo.size.width / 3)
                                 VStack {
                                     GameSelection
@@ -168,14 +111,14 @@ struct GameEntryView: View {
                                 VStack {
                                     Text("Total Statistics")
                                         .fontWeight(.bold)
-                                    Text("Games Played: \(listGames.count)")
+                                    Text("Games Played: \(games.GlistGames.count)")
                                         .fontWeight(.bold)
-                                    Text("\(players.getName(myID: Int64(player1) ?? 804)) won: \(player1TotalGamesWon.count)")
-                                    Text("\(players.getName(myID: Int64(player2) ?? 805)) won: \(player2TotalGamesWon.count)")
+                                    Text("\(players.getName(myID: games.player1ID)) won: \(games.player1TotalGamesWon.count)")
+                                    Text("\(players.getName(myID: games.player2ID)) won: \(games.player2TotalGamesWon.count)")
                                     Text("Rubbers won")
                                         .fontWeight(.bold)
-                                    Text("\(players.getName(myID: Int64(player1) ?? 802)) won: \(rubbersPlayer1Total)")
-                                    Text("\(players.getName(myID: Int64(player2) ?? 803)) won: \(rubbersPlayer2Total)")
+                                    Text("\(players.getName(myID: games.player1ID)) won: \(games.rubbersPlayer1Total)")
+                                    Text("\(players.getName(myID: games.player2ID)) won: \(games.rubbersPlayer2Total)")
                                 }.frame(width: geo.size.width / 3)
                             }
                         }
@@ -188,30 +131,27 @@ struct GameEntryView: View {
                                     VStack {
                                         Text("Todays Statistics")
                                             .fontWeight(.bold)
-                                        Text("Games Played: \(todayGames.count)")
+                                        Text("Games Played: \(games.todayGames.count)")
                                             .fontWeight(.bold)
-                                        Text("\(players.getName(myID: Int64(player1) ?? 806)) won: \(player1TodayGamesWon.count)")
-                                        Text("\(players.getName(myID: Int64(player2) ?? 807)) won: \(player2TodayGamesWon.count)")
+                                        Text("\(players.getName(myID: games.player1ID)) won: \(games.player1TodayGamesWon.count)")
+                                        Text("\(players.getName(myID: games.player2ID)) won: \(games.player2TodayGamesWon.count)")
                                         Text("Rubbers won")
                                             .fontWeight(.bold)
-                                        Text("\(players.getName(myID: Int64(player1) ?? 802)) won: \(rubbersPlayer1Today)")
-                                        Text("\(players.getName(myID: Int64(player2) ?? 803)) won: \(rubbersPlayer2Today)")
+                                        Text("\(players.getName(myID: games.player1ID)) won: \(games.rubbersPlayer1Today)")
+                                        Text("\(players.getName(myID: games.player2ID)) won: \(games.rubbersPlayer2Today)")
                                     }.id(0)
                                     VStack {
                                         GameSelection
                                         PlayerSelection
                                     }.id(1)
                                     VStack {
-                                        Text("\(players.getName(myID: Int64(player1) ?? 804)) won: \(player1TotalGamesWon.count)")
-                                        Text("\(players.getName(myID: Int64(player2) ?? 805)) won: \(player2TotalGamesWon.count)")
+                                        Text("\(players.getName(myID: games.player1ID)) won: \(games.player1TotalGamesWon.count)")
+                                        Text("\(players.getName(myID: games.player2ID)) won: \(games.player2TotalGamesWon.count)")
                                         Text("Rubbers won")
                                             .fontWeight(.bold)
 
-                                        Text("\(players.getName(myID: Int64(player1) ?? 802)) won: \(rubbersPlayer1Total)")
-                                            .onAppear() {
-                                                CountRubbers()
-                                            }
-                                        Text("\(players.getName(myID: Int64(player2) ?? 803)) won: \(rubbersPlayer2Total)")
+                                        Text("\(players.getName(myID: games.player1ID)) won: \(games.rubbersPlayer1Total)")
+                                        Text("\(players.getName(myID: games.player2ID)) won: \(games.rubbersPlayer2Total)")
                                     }.id(2)
                                 }
                             }
@@ -224,7 +164,7 @@ struct GameEntryView: View {
             }
 
             GameEntrySelect
-            Text("isChanged:\(games.isChanged)")
+            Text("games.count \(games.games.count) games.GlistGames.count \(games.GlistGames.count)")
 
             if !GameEntryShowing {
                 ListGames
@@ -235,16 +175,9 @@ struct GameEntryView: View {
         .onAppear() {
 
             players.BlankAdd()
-            if games.games.count == 0 {
-                games.fetchAll() { rtnMessage in
 
-                    if games.games.count > 0 {
-                        setInitialGame()
-                    }
-                }
-            } else {
-                setInitialGame()
-            }
+            setInitialGame()
+
         }
         .onDisappear() {
             players.BlankRemove()
@@ -263,68 +196,27 @@ struct GameEntry_Previews: PreviewProvider {
 
 extension GameEntryView {
     func setInitialGame() {
-        player1 = String(games.games[0].Player1ID)
-        player2 = String(games.games[0].Player2ID)
-        winner = player1
-        board = String(games.games[0].BoardID)
-        CountRubbers()
+        games.player1 = String(games.games[0].Player1ID)
+        games.player2 = String(games.games[0].Player2ID)
+        winner = games.player1
+        games.board = String(games.games[0].BoardID)
+        myBoard =  boards.boards.first(where: {$0.myID == games.boardID}) ?? Board(Name: "Unknown", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 0, myID: 0)!
+        print("setInitialGame DONE")
+//        CountRubbers()
     }
-    func CountRubbers() {
-        rubbersPlayer1Today = CountOneRubber(myGames: todayGames, playerID: Int64(player1) ?? 0)
-        rubbersPlayer2Today = CountOneRubber(myGames: todayGames, playerID: Int64(player2) ?? 0)
-        rubbersPlayer1Total = CountOneRubber(myGames: listGames, playerID: Int64(player1) ?? 0)
-        rubbersPlayer2Total = CountOneRubber(myGames: listGames, playerID: Int64(player2) ?? 0)
-    }
-    func CountOneRubber(myGames: [Game], playerID: Int64) -> Int {
-        if myGames.count == 0 { return 0 }
-        var playerwins = 0
-        var otherwins = 0
-        var numberOfRubbers = 0
-        var prevDate = myGames[myGames.count - 1].DatePlayed
-        for game in myGames.reversed() {
-            if !Calendar.current.isDate(prevDate, inSameDayAs: game.DatePlayed) {
-                playerwins = 0
-                otherwins = 0
-                prevDate = game.DatePlayed
-            }
-                
-                if playerID == game.WinnerID {
-                    playerwins += 1
-                } else {
-                    otherwins += 1
-                }
-                if playerwins == 2 {
-                    numberOfRubbers += 1
-                    playerwins = 0
-                    otherwins = 0
-                }
-                if otherwins == 2 {
-                    playerwins = 0
-                    otherwins = 0
-                }
-            
 
-        }
-
-        return numberOfRubbers
-    }
     private var GameSelection: some View {
         VStack {
-            Text("Select the Game board = \(board)")
-            Picker("", selection: $board) {
+            Text("Select the Game board = \(games.board)")
+            Picker("", selection: $games.board) {
                 ForEach(boards.boards) { board in
                     Text("\(board.Name)").tag("\(board.myID)")
                 }
-//                .onAppear() {
-//                    if board == "9999" {
-//                        board = boards.boards.count > 0 ? String(boards.boards[0].myID) : "998"
-//                    }
-//                }
             }
             .myButtonViewStyle(width: CGFloat(pickerWidth))
-            .onChange(of: board) { _ in
-                boardID = Int64(board) ?? 910
-                myBoard =  boards.boards.first(where: {$0.myID == boardID}) ?? Board(Name: "Unknown", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 0, myID: 0)!
+            .onChange(of: games.board) { _ in
+                //rbq boardID = Int64(board) ?? 910
+                myBoard =  boards.boards.first(where: {$0.myID == games.boardID}) ?? Board(Name: "Unknown", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 0, myID: 0)!
             }
         }
     }
@@ -333,34 +225,22 @@ extension GameEntryView {
             Text("Select Players")
             AdaptiveView {
                 VStack {
-                    Text("player1 = \(player1)")
-                    Picker("", selection: $player1) {
+                    Text("player1 = \(games.player1)")
+                    Picker("", selection: $games.player1) {
                         ForEach(listPlayer1) { player in
                             Text("\(player.Name)").tag("\(String(player.myID))")
                         }
-//                        .onAppear() {
-//                            if player1 == "9999" {      // allow selection of a empty player to see all the games for the other player
-//                                player1 = games.games.count > 0 ? String(games.games[0].Player1ID) : "998"
-//                            }
-//                        }
                     }
                     .myButtonViewStyle(width: CGFloat(pickerWidth))
-                    .onChange(of: player1) { _ in player1ID = Int64(player1) ?? 800 }
                 }
                 VStack {
-                    Text("player2 = \(player2)")
-                    Picker("", selection: $player2) {
+                    Text("player2 = \(games.player2)")
+                    Picker("", selection: $games.player2) {
                         ForEach(listPlayer2) { player in
                             Text("\(player.Name)").tag("\(String(player.myID))")
                         }
-//                        .onAppear() {
-//                            if player2 == "9999" {
-//                                player2 = games.games.count > 0 ? String(games.games[0].Player2ID) : "999"
-//                            }
-//                        }
                     }
                     .myButtonViewStyle(width: CGFloat(pickerWidth))
-                    .onChange(of: player2) { _ in player2ID = Int64(player2) ?? 801 }
                 }
             }
         }
@@ -373,9 +253,8 @@ extension GameEntryView {
                     Text("New Game")
                     if GameEntryCanShow {
                         myButton(action: {
-                            winner = player1
-                            changeSelectionsToInt64()
-                            restore(game: Game(BoardID: boardID, Board: board, DatePlayed: Date(), WinnerID: winnerID, Player1ID: player1ID, Score1: 0, Player2ID: player2ID, Score2: 0, myID: 0)!)
+                            winner = games.player1
+                            restore(game: Game(BoardID: games.boardID, Board: boards.getName(myID: games.boardID), DatePlayed: Date(), WinnerID: winnerID, Player1ID: games.player1ID, Score1: 0, Player2ID: games.player2ID, Score2: 0, myID: 0)!)
                             returnedMessage = "Entering New Game"
                             GameEntryNewGame = true
                             GameEntryShowing.toggle()
@@ -389,14 +268,12 @@ extension GameEntryView {
                     if !GameEntryNewGame {
                         myButton(action: {
                             delete()
-                            CountRubbers()
                             GameEntryShowing.toggle()
                         }, content: {
                             Text("Delete")
                         })
                     }
                     myButton(action: {
-                        CountRubbers()
                         GameEntryNewGame = false
                         GameEntryShowing.toggle()
                     }) {
@@ -405,7 +282,6 @@ extension GameEntryView {
                     myButton(action: {
                         if GameEntryNewGame {
                             add()
-                            CountRubbers()
                         } else {
                             change()
                         }
@@ -421,28 +297,16 @@ extension GameEntryView {
             }
         }
     }
-    func changeSelectionsToInt64() {
-        player1ID = Int64(player1) ?? 901
-        player2ID = Int64(player2) ?? 902
-        winnerID = Int64(winner) ?? 901
-    }
-    func changeInt64ToSelections() {
-        player1 = String(player1ID)
-        player2 = String(player2ID)
-        winner = String(winnerID)
-    }
     func add() {
-        changeSelectionsToInt64()
-        MyDefaults().Player1ID = player1ID
-        MyDefaults().Player2ID = player2ID
-        MyDefaults().Board = board
-        games.add(BoardID: boardID, Board: boards.getName(myID: boardID), DatePlayed: datePlayed, WinnerID: winnerID, Player1ID: player1ID, Score1: score1, Player2ID: player2ID, Score2: score2) { rtnMessage in
+        MyDefaults().Player1ID = games.player1ID
+        MyDefaults().Player2ID = games.player2ID
+        MyDefaults().Board = games.board
+        games.add(BoardID: games.boardID, Board: boards.getName(myID: games.boardID), DatePlayed: datePlayed, WinnerID: winnerID, Player1ID: games.player1ID, Score1: score1, Player2ID: games.player2ID, Score2: score2) { rtnMessage in
             returnedMessage = rtnMessage
         }
     }
     func change() {
-        changeSelectionsToInt64()
-        guard let changeRec = myGame.update(BoardID: boardID, Board: boards.getName(myID: boardID), DatePlayed: datePlayed, WinnerID: winnerID, Player1ID: player1ID, Score1: score1, Player2ID: player2ID, Score2: score2) else { return }
+        guard let changeRec = myGame.update(BoardID: games.boardID, Board: boards.getName(myID: games.boardID), DatePlayed: datePlayed, WinnerID: winnerID, Player1ID: games.player1ID, Score1: score1, Player2ID: games.player2ID, Score2: score2) else { return }
         myGame = changeRec
         games.change(game: changeRec) { rtnMessage in
             returnedMessage = rtnMessage
@@ -469,13 +333,14 @@ extension GameEntryView {
             }
             .onAppear {
                 if GameEntryNewGame {
-                    winner = player1
+                    winner = games.player1
                     score1 = myBoard.maxScore
                 }
             }
             .onChange(of: winner, perform: { _ in
                 if GameEntryNewGame {
-                    if player1 == winner {
+                    winnerID = Int64(winner) ?? 0
+                    if games.player1 == winner {
                         score1 = myBoard.maxScore
                     } else {
                         score2 = myBoard.maxScore
@@ -487,11 +352,11 @@ extension GameEntryView {
             if myBoard.maxScore > 0 {
                 AdaptiveView {
                     VStack {
-                        Text("\(players.getPlayerName(myID: player1)) Score:\(score1, specifier: "%.0f")")
+                        Text("\(players.getPlayerName(myID: games.player1)) Score:\(score1, specifier: "%.0f")")
                         Slider(value: $score1, in: myBoard.minScore ... myBoard.maxScore, step: 1.0)
                     }
                     VStack {
-                        Text("\(players.getPlayerName(myID: player2)) Score:\(score2, specifier: "%.0f")")
+                        Text("\(players.getPlayerName(myID: games.player2)) Score:\(score2, specifier: "%.0f")")
                         Slider(value: $score2, in: myBoard.minScore ... myBoard.maxScore, step: 1.0)
                     }
                 }
@@ -502,14 +367,14 @@ extension GameEntryView {
         GeometryReader { geo in
             ScrollView(.vertical) {
                 LazyVStack {
-                    ForEach(listGames.indices, id:\.self) { idx in
+                    ForEach(games.GlistGames.indices, id:\.self) { idx in
                         myButton(action: {
-                            myGame = listGames[idx]
-                            restore(game: listGames[idx])
+                            myGame = games.GlistGames[idx]
+                            restore(game: games.GlistGames[idx])
                             returnedMessage = "Changing a game"
                             GameEntryEditingIdx = idx
                             GameEntryShowing.toggle()
-                        }, content: { GameLineView(game: listGames[idx])}, width: geo.size.width, height: 51)
+                        }, content: { GameLineView(game: games.GlistGames[idx])}, width: geo.size.width, height: 51)
                         
                         
                     }
@@ -520,13 +385,13 @@ extension GameEntryView {
         }
     }
     func restore(game: Game) {
-        board = game.Board
+        games.board = String(game.BoardID)
         score1 = game.Score1
         score2 = game.Score2
         datePlayed = game.DatePlayed
         winner = String(game.WinnerID)
-        player1 = String(game.Player1ID)
-        player2 = String(game.Player2ID)
+        games.player1 = String(game.Player1ID)
+        games.player2 = String(game.Player2ID)
         // changeInt64ToSelections()
     }
 }

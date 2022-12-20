@@ -17,6 +17,131 @@ class Games: ObservableObject {
     @Published var errorMessage: String? = nil
     @Published var canDeleteGame: Bool = false
 
+    // screen input fields are strings and then accessing fields are Int64
+    @Published var board: String = "" {
+        didSet {
+            self.boardID = Int64(board) ?? 0
+        }
+    }
+    @Published var boardID: Int64 = 0
+    @Published var player1: String = "" {
+        didSet {
+            self.player1ID = Int64(player1) ?? 0
+        }
+    }
+    @Published var player1ID: Int64 = 0
+    @Published var player2: String = "" {
+        didSet {
+            self.player2ID = Int64(player2) ?? 0
+        }
+    }
+    @Published var player2ID: Int64 = 0
+
+    // different way to look at the games played
+    // all driven by the above variables
+     var GlistGames: [Game] {
+        if player1ID == 0 || player2ID == 0 {
+            return games.filter {
+                $0.BoardID == self.boardID
+                && (( $0.Player1ID == player1ID || $0.Player1ID == player2ID )
+                    || ( $0.Player2ID == player1ID || $0.Player2ID == player2ID) )
+            }
+        } else {
+            return games.filter {
+                $0.BoardID == self.boardID
+                && ( $0.Player1ID == player1ID || $0.Player1ID == player2ID )
+                && ( $0.Player2ID == player1ID || $0.Player2ID == player2ID )
+            }
+        }
+    }
+    var lastDate: Date {
+        if self.GlistGames.count > 0 {
+            return self.GlistGames[0].DatePlayed
+        } else {
+            return Date()
+        }
+    }
+    var todayGames: [Game] {
+        return self.GlistGames.filter { game in
+            Calendar.current.isDate( game.DatePlayed, equalTo: lastDate, toGranularity: .day)
+        }
+    }
+    var player1TodayGamesWon: [Game] {
+        return todayGames.filter { game in
+            self.player1ID == game.WinnerID
+        }
+    }
+    var player2TodayGamesWon: [Game] {
+        return todayGames.filter { game in
+            self.player2ID == game.WinnerID
+        }
+    }
+    var player1TotalGamesWon: [Game] {
+        return self.GlistGames.filter { game in
+            self.player1ID == game.WinnerID
+        }
+    }
+    var player2TotalGamesWon: [Game] {
+        return self.GlistGames.filter { game in
+            self.player2ID == game.WinnerID
+        }
+    }
+    var rubbersPlayer1Today: Int {
+        return CountOneRubber(myGames: self.todayGames, playerID: self.player1ID)
+    }
+    var rubbersPlayer2Today: Int {
+        CountOneRubber(myGames: self.todayGames, playerID: self.player2ID)
+    }
+    var rubbersPlayer1Total: Int {
+        CountOneRubber(myGames: self.GlistGames, playerID: self.player1ID)
+    }
+    var rubbersPlayer2Total: Int {
+        CountOneRubber(myGames: self.GlistGames, playerID: self.player2ID)
+    }
+    //    func CountRubbers() {
+    //        rubbersPlayer1Today = CountOneRubber(myGames: todayGames, playerID: Int64(player1) ?? 0)
+    //        rubbersPlayer2Today = CountOneRubber(myGames: todayGames, playerID: Int64(player2) ?? 0)
+    //        rubbersPlayer1Total = CountOneRubber(myGames: listGames, playerID: Int64(player1) ?? 0)
+    //        rubbersPlayer2Total = CountOneRubber(myGames: listGames, playerID: Int64(player2) ?? 0)
+    //    }
+        func CountOneRubber(myGames: [Game], playerID: Int64) -> Int {
+            if myGames.count == 0 { return 0 }
+            var playerwins = 0
+            var otherwins = 0
+            var numberOfRubbers = 0
+            var prevDate = myGames[myGames.count - 1].DatePlayed
+            for game in myGames.reversed() {
+                if !Calendar.current.isDate(prevDate, inSameDayAs: game.DatePlayed) {
+                    playerwins = 0
+                    otherwins = 0
+                    prevDate = game.DatePlayed
+                }
+
+                    if playerID == game.WinnerID {
+                        playerwins += 1
+                    } else {
+                        otherwins += 1
+                    }
+                    if playerwins == 2 {
+                        numberOfRubbers += 1
+                        playerwins = 0
+                        otherwins = 0
+                    }
+                    if otherwins == 2 {
+                        playerwins = 0
+                        otherwins = 0
+                    }
+
+
+            }
+
+            return numberOfRubbers
+        }
+
+
+
+
+
     var cancellables = Set<AnyCancellable>()
 
     var isTracing: Bool = true
@@ -87,6 +212,7 @@ func getSectionedDictionary() -> Dictionary <String , [Game]> {
                 .sink { c in
                     switch c {
                     case .finished:
+                      //  self.GlistGamesBuild()
                         self.tracing(function: "add .finished")
                         completion("Game added")
                     case .failure(let error):
@@ -107,6 +233,7 @@ func getSectionedDictionary() -> Dictionary <String , [Game]> {
             .sink { c in
                 switch c {
                 case .finished:
+                   // self.GlistGamesBuild()
                     self.tracing(function: "change .finished")
                     completion("Game changed")
                 case .failure(let error):
@@ -129,6 +256,7 @@ func getSectionedDictionary() -> Dictionary <String , [Game]> {
             .sink { c in
                 switch c {
                 case .finished:
+                  //  self.GlistGamesBuild()
                     self.tracing(function: "add .finished")
                     completion("Game deleted")
                 case .failure(let error):
@@ -150,6 +278,12 @@ func getSectionedDictionary() -> Dictionary <String , [Game]> {
             .sink { c in
                 switch c {
                 case .finished:
+                    if self.games.count > 0 {
+                        self.player1 = String(self.games[0].Player1ID)
+                        self.player2 = String(self.games[0].Player2ID)
+                        self.board = String(self.games[0].BoardID)
+                    }
+                  //  self.GlistGamesBuild()
                     self.tracing(function: "fetchAll .finished")
                     completion("fetchAll Completed")
                 case .failure(let error):
