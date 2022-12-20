@@ -33,7 +33,8 @@ class Games: ObservableObject {
         ]
         sectionDictionary = [:]
         sectionDictionary = getSectionedDictionary()
-    }
+        games.removeAll()
+        }
 
 func rebuildDictionary() {
     games.sort {

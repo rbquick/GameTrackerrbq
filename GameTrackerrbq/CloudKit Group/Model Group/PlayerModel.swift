@@ -55,7 +55,11 @@ class Players: ObservableObject {
         return sectionDictionary
     }
     func BlankAdd() {
-        players.insert(Player(Name: "", myID: 0)!, at: 0)
+        if players.count > 0 {
+            if players[0].Name != "" {
+                players.insert(Player(Name: "", myID: 0)!, at: 0)
+            }
+        }
     }
     func BlankRemove() {
         players.removeAll(where: {$0.Name == ""})

@@ -145,11 +145,11 @@ extension MenuDriver {
                 boards.sectionDictionary = [:]
                 boards.sectionDictionary = boards.getSectionedDictionary()
             }
-            games.fetchAll() { rtnMessage in
-                returnedMessage = rtnMessage
-                games.sectionDictionary = [:]
-                games.sectionDictionary = games.getSectionedDictionary()
-            }
+//            games.fetchAll() { rtnMessage in
+//                returnedMessage = rtnMessage
+//                games.sectionDictionary = [:]
+//                games.sectionDictionary = games.getSectionedDictionary()
+//            }
             hasBeenStarted.toggle()
             // TODO this is not yet turned off somewhere else
             sm.isLoading = false
