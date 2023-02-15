@@ -98,7 +98,7 @@ extension GamesListView {
                     Text("\(myDateFormatter(inDate: record.DatePlayed, outFormat: "yyyy-MM-dd")) ... \(record.Board)")
                     Text("\(record.Player1Str) - \(record.Player2Str)")
                 }
-                VStack {
+                HStack {
                     Text("Winner is \(Text("\(record.WinnerStr)").foregroundColor(Color.red)) \(record.Score1, specifier: "%.0f")-\(record.Score2, specifier: "%.0f")")
                 }
             }

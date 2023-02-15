@@ -43,23 +43,23 @@ struct MenuDriver: View {
                             GameEntryView().tabItem { Text("New Game") }.tag(1)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .modifier(BackgroundGradientViewModifier())
-                            
+
                         case 2:
                             PlayersGamesView().tabItem  { Text("Reporting") }.tag(2)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .modifier(BackgroundGradientViewModifier())
                         case 3:
                             // MaintenanceView
-                            
+
                             MaintenanceView().tabItem  { Text("Maintenance") }.tag(3)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .modifier(BackgroundGradientViewModifier())
-                            
+
                         default:
                             LoginView()
                         }
-                        
-                        
+
+
                     }
                 }
 
@@ -91,6 +91,9 @@ struct MenuDriver: View {
 #if os(macOS)
       //  .frame(width: 800, height: 800)
 #endif
+            if games.rubbersPlayer1Today > 0 || games.rubbersPlayer2Today > 0 {
+                FireworkParticlesContentView()
+            }
             if sm.isLoading  {
 
                         ProgressView("Connecting")

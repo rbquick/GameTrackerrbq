@@ -158,7 +158,7 @@ class Games: ObservableObject {
         ]
         sectionDictionary = [:]
         sectionDictionary = getSectionedDictionary()
-        games.removeAll()
+//        games.removeAll()
         }
 
 func rebuildDictionary() {
@@ -295,5 +295,12 @@ func getSectionedDictionary() -> Dictionary <String , [Game]> {
             }
             .store(in: &cancellables)
         tracing(function: "fetchAll exit")
+    }
+    func findFirstForBoard(board: Board) -> Game {
+        var thisGame = games.first(where: { $0.BoardID == board.myID })
+        if thisGame == nil {
+            thisGame = Game(BoardID: 0, Board: "Unknown", DatePlayed: Date(), WinnerID: 0, Player1ID: 0, Score1: 0, Player2ID: 0, Score2: 0, myID: 0)
+        }
+        return thisGame!
     }
 }

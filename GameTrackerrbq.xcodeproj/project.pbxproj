@@ -52,6 +52,9 @@
 		71AF1536294E0617006FD2C8 /* BoardsMaintenanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF152B294E0617006FD2C8 /* BoardsMaintenanceView.swift */; };
 		71AF1537294E0617006FD2C8 /* BoardsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF152C294E0617006FD2C8 /* BoardsListView.swift */; };
 		71AF1539294E0617006FD2C8 /* ColorDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF152E294E0617006FD2C8 /* ColorDefaults.swift */; };
+		71AF153B2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF153A2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift */; };
+		71AF153D29526656006FD2C8 /* ParticlesModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF153C29526656006FD2C8 /* ParticlesModifier.swift */; };
+		71AF153F29526751006FD2C8 /* FireworkParticlesContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF153E29526751006FD2C8 /* FireworkParticlesContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -101,6 +104,9 @@
 		71AF152B294E0617006FD2C8 /* BoardsMaintenanceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardsMaintenanceView.swift; sourceTree = "<group>"; };
 		71AF152C294E0617006FD2C8 /* BoardsListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardsListView.swift; sourceTree = "<group>"; };
 		71AF152E294E0617006FD2C8 /* ColorDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorDefaults.swift; sourceTree = "<group>"; };
+		71AF153A2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworkParticlesGeometryEffect.swift; sourceTree = "<group>"; };
+		71AF153C29526656006FD2C8 /* ParticlesModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticlesModifier.swift; sourceTree = "<group>"; };
+		71AF153E29526751006FD2C8 /* FireworkParticlesContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworkParticlesContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +189,7 @@
 				71AF14F4294E05EF006FD2C8 /* HoleStyle.swift */,
 				71AF14F5294E05EF006FD2C8 /* myDateFormatter.swift */,
 				71AF14F6294E05EF006FD2C8 /* SectionHeader.swift */,
+				71AF1540295267D5006FD2C8 /* Fireworks */,
 			);
 			path = MyStuff;
 			sourceTree = "<group>";
@@ -287,6 +294,16 @@
 			path = "Boards Views";
 			sourceTree = "<group>";
 		};
+		71AF1540295267D5006FD2C8 /* Fireworks */ = {
+			isa = PBXGroup;
+			children = (
+				71AF153A2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift */,
+				71AF153C29526656006FD2C8 /* ParticlesModifier.swift */,
+				71AF153E29526751006FD2C8 /* FireworkParticlesContentView.swift */,
+			);
+			path = Fireworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -375,7 +392,9 @@
 				71AF14FB294E05EF006FD2C8 /* PopoverLink.swift in Sources */,
 				71AF14E4294E057A006FD2C8 /* ReportingView.swift in Sources */,
 				71AF14CD294D3A5F006FD2C8 /* ContentView.swift in Sources */,
+				71AF153D29526656006FD2C8 /* ParticlesModifier.swift in Sources */,
 				71AF151D294E0609006FD2C8 /* GameRec.swift in Sources */,
+				71AF153F29526751006FD2C8 /* FireworkParticlesContentView.swift in Sources */,
 				71AF1500294E05EF006FD2C8 /* AdaptiveView.swift in Sources */,
 				71AF14F9294E05EF006FD2C8 /* Logger.swift in Sources */,
 				71AF14F7294E05EF006FD2C8 /* Logging.swift in Sources */,
@@ -384,6 +403,7 @@
 				71AF14E1294E057A006FD2C8 /* MaintenanceView.swift in Sources */,
 				71AF14FA294E05EF006FD2C8 /* DeviceRotation.swift in Sources */,
 				71AF1504294E05EF006FD2C8 /* myDateFormatter.swift in Sources */,
+				71AF153B2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift in Sources */,
 				71AF1503294E05EF006FD2C8 /* HoleStyle.swift in Sources */,
 				71AF1501294E05EF006FD2C8 /* View+ReadSize.swift in Sources */,
 				71AF1531294E0617006FD2C8 /* GameEntryView.swift in Sources */,

@@ -18,7 +18,8 @@ struct GameEntryView: View {
 
 
     let pickerWidth = 260
-
+    @State private var opacity = 1.0
+    @State var showBanana = false
     @State var returnedMessage = ""
 
     // These two lisvarts will not contain one anothers selected players
@@ -86,73 +87,41 @@ struct GameEntryView: View {
  */
 
     var body: some View {
-        VStack {
+        VStack(alignment: .center) {
             if !GameEntryShowing {
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    VStack {
-                        GeometryReader { geo in
-                            HStack {
-                                VStack {
-                                    Text("Todays Statistics")
-                                        .fontWeight(.bold)
-                                    Text("Games Played: \(games.todayGames.count)")
-                                        .fontWeight(.bold)
-                                    Text("\(players.getName(myID: games.player1ID)) won: \(games.player1TodayGamesWon.count)")
-                                    Text("\(players.getName(myID: games.player2ID)) won: \(games.player2TodayGamesWon.count)")
-                                    Text("Rubbers won")
-                                        .fontWeight(.bold)
-                                    Text("\(players.getName(myID: games.player1ID)) won: \(games.rubbersPlayer1Today)")
-                                    Text("\(players.getName(myID: games.player2ID)) won: \(games.rubbersPlayer2Today)")
-                                }.frame(width: geo.size.width / 3)
-                                VStack {
-                                    GameSelection
-                                    PlayerSelection
-                                }.frame(width: geo.size.width / 3)
-                                VStack {
-                                    Text("Total Statistics")
-                                        .fontWeight(.bold)
-                                    Text("Games Played: \(games.GlistGames.count)")
-                                        .fontWeight(.bold)
-                                    Text("\(players.getName(myID: games.player1ID)) won: \(games.player1TotalGamesWon.count)")
-                                    Text("\(players.getName(myID: games.player2ID)) won: \(games.player2TotalGamesWon.count)")
-                                    Text("Rubbers won")
-                                        .fontWeight(.bold)
-                                    Text("\(players.getName(myID: games.player1ID)) won: \(games.rubbersPlayer1Total)")
-                                    Text("\(players.getName(myID: games.player2ID)) won: \(games.rubbersPlayer2Total)")
-                                }.frame(width: geo.size.width / 3)
-                            }
-                        }
-                    }
-                } else {
-                    VStack {
+                VStack(alignment: .center) {
                         ScrollViewReader { value in
                             ScrollView(.horizontal) {
                                 HStack {
-                                    VStack {
-                                        Text("Todays Statistics")
-                                            .fontWeight(.bold)
-                                        Text("Games Played: \(games.todayGames.count)")
-                                            .fontWeight(.bold)
-                                        Text("\(players.getName(myID: games.player1ID)) won: \(games.player1TodayGamesWon.count)")
-                                        Text("\(players.getName(myID: games.player2ID)) won: \(games.player2TodayGamesWon.count)")
-                                        Text("Rubbers won")
-                                            .fontWeight(.bold)
-                                        Text("\(players.getName(myID: games.player1ID)) won: \(games.rubbersPlayer1Today)")
-                                        Text("\(players.getName(myID: games.player2ID)) won: \(games.rubbersPlayer2Today)")
-                                    }.id(0)
-                                    VStack {
-                                        GameSelection
-                                        PlayerSelection
-                                    }.id(1)
-                                    VStack {
-                                        Text("\(players.getName(myID: games.player1ID)) won: \(games.player1TotalGamesWon.count)")
-                                        Text("\(players.getName(myID: games.player2ID)) won: \(games.player2TotalGamesWon.count)")
-                                        Text("Rubbers won")
-                                            .fontWeight(.bold)
+                                    Spacer(minLength: 500)
+                                    HStack {
+                                        VStack {
+                                            Text("Todays Statistics")
+                                                .fontWeight(.bold)
+                                            Text("Games Played: \(games.todayGames.count)")
+                                                .fontWeight(.bold)
+                                            Text("\(players.getName(myID: games.player1ID)) won: \(games.player1TodayGamesWon.count)")
+                                            Text("\(players.getName(myID: games.player2ID)) won: \(games.player2TodayGamesWon.count)")
+                                            Text("Rubbers won")
+                                                .fontWeight(.bold)
+                                            Text("\(players.getName(myID: games.player1ID)) won: \(games.rubbersPlayer1Today)")
+                                            Text("\(players.getName(myID: games.player2ID)) won: \(games.rubbersPlayer2Today)")
+                                        }.id(0)
+                                        VStack {
+                                            GameSelection
+                                            PlayerSelection
+                                        }.id(1)
+                                        VStack {
+                                            Text("\(players.getName(myID: games.player1ID)) won: \(games.player1TotalGamesWon.count)")
+                                            Text("\(players.getName(myID: games.player2ID)) won: \(games.player2TotalGamesWon.count)")
+                                            Text("Rubbers won")
+                                                .fontWeight(.bold)
 
-                                        Text("\(players.getName(myID: games.player1ID)) won: \(games.rubbersPlayer1Total)")
-                                        Text("\(players.getName(myID: games.player2ID)) won: \(games.rubbersPlayer2Total)")
-                                    }.id(2)
+                                            Text("\(players.getName(myID: games.player1ID)) won: \(games.rubbersPlayer1Total)")
+                                            Text("\(players.getName(myID: games.player2ID)) won: \(games.rubbersPlayer2Total)")
+                                        }.id(2)
+                                    }
+                                    Spacer(minLength: 500)
                                 }
                             }
                             .onAppear() {
@@ -160,7 +129,6 @@ struct GameEntryView: View {
                             }
                         }
                     }
-                }
             }
 
             GameEntrySelect
@@ -188,6 +156,7 @@ struct GameEntryView: View {
 struct GameEntry_Previews: PreviewProvider {
     static var previews: some View {
         GameEntryView()
+            .environmentObject(StateManager())
             .environmentObject(Boards())
             .environmentObject(Games())
             .environmentObject(Players())
@@ -214,11 +183,17 @@ extension GameEntryView {
                 }
             }
             .myButtonViewStyle(width: CGFloat(pickerWidth))
-            .onChange(of: games.board) { _ in
+            .onChange(of: games.board) { selection in
                 //rbq boardID = Int64(board) ?? 910
                 myBoard =  boards.boards.first(where: {$0.myID == games.boardID}) ?? Board(Name: "Unknown", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 0, myID: 0)!
+                setPlayersForBoard(board: myBoard)
             }
         }
+    }
+    func setPlayersForBoard(board: Board) {
+        let thisGame = games.findFirstForBoard(board: board)
+        games.player1 = String(thisGame.Player1ID)
+        games.player2 = String(thisGame.Player2ID)
     }
     private var PlayerSelection: some View {
         VStack{
@@ -293,7 +268,7 @@ extension GameEntryView {
                 }
             }.uses(alertManager)
             if GameEntryShowing {
-                GameEntryView
+                GameEntryViewEntering
             }
         }
     }
@@ -322,15 +297,62 @@ extension GameEntryView {
             }
             }), secondaryButton: .cancel()))
         }
-    private var GameEntryView: some View {
+    private var GameEntryViewEntering: some View {
         VStack {
             Divider()
             Text("Pick a winner")
-            Picker("Winner", selection: $winner) {
-                ForEach(myPlayers) { player in
-                    Text("\(player.myID) \(player.Name)").tag("\(player.myID)")
+            HStack {
+                AdaptiveView {
+                    HStack {
+                        Button("\(myPlayers[0].Name)") {
+                            withAnimation(.easeInOut) { winner = games.player1 }
+                        }
+                        .myButtonViewStyle(width: 260, height: MyDefaults().buttonHeight)
+                        .buttonStyle(StaticButtonStyle())
+                        if games.player1 == winner {
+                            Image(systemName: "checkmark")
+                                .resizable()
+                                .frame(width: 32.0, height: 32.0)
+                                .foregroundColor(.red)
+                                .font(Font.body.bold())
+                                .transition(.slide)
+                        }
+                    }
+                    HStack {
+                        Button("\(myPlayers[1].Name)") {
+                            withAnimation(.easeInOut) { winner = games.player2 }
+                        }
+                        .myButtonViewStyle(width: 260, height: MyDefaults().buttonHeight)
+                        .buttonStyle(StaticButtonStyle())
+                        if games.player2 == winner {
+                            Image(systemName: "checkmark")
+                                .resizable()
+                                .frame(width: 32.0, height: 32.0)
+                                .foregroundColor(.red)
+                                .font(Font.body.bold())
+                                .transition(.slide)
+                        }
+                    }
                 }
+//                myButton(action: {
+//                    winner = games.player1
+//                }, content: {
+//                    Text("\(myPlayers[0].Name)")
+//                }, width: CGFloat(pickerWidth))
+//
+//                myButton(action: {
+//                    winner = games.player2
+//                }, content: {
+//                    Text(" \(myPlayers[1].Name)")
+//                },  width: CGFloat(pickerWidth))
+//                .animation(.spring())
+
             }
+//            Picker("Winner", selection: $winner) {
+//                ForEach(myPlayers) { player in
+//                    Text("\(player.myID) \(player.Name)").tag("\(player.myID)")
+//                }
+//            }
             .onAppear {
                 if GameEntryNewGame {
                     winner = games.player1
@@ -406,8 +428,8 @@ struct GameLineView: View {
                 Text("\(myDateFormatter(inDate: game.DatePlayed, outFormat: "yyyy-MM-dd")) ... \(game.Board)")
                 Text("\(players.getName(myID: game.Player1ID)) - \(players.getName(myID: game.Player2ID))")
             }
-            VStack {
-                Text("Winner is \(Text("\(players.getName(myID: game.WinnerID))").foregroundColor(Color.red)) \(game.Score1, specifier: "%.0f")-\(game.Score2, specifier: "%.0f")")
+            HStack {
+                Text("Winner is \(Text("\(players.getName(myID: game.WinnerID))").foregroundColor(Color.red))   \(game.Score1, specifier: "%.0f")-\(game.Score2, specifier: "%.0f")")
             }
         }
         .myBackgroundStyle()
