@@ -112,6 +112,10 @@ struct GameEntryView: View {
                                             PlayerSelection
                                         }.id(1)
                                         VStack {
+                                            Text("Overall Statistics")
+                                                .fontWeight(.bold)
+                                            Text("Games Played: \(games.GlistGames.count)")
+                                                .fontWeight(.bold)
                                             Text("\(players.getName(myID: games.player1ID)) won: \(games.player1TotalGamesWon.count)")
                                             Text("\(players.getName(myID: games.player2ID)) won: \(games.player2TotalGamesWon.count)")
                                             Text("Rubbers won")
@@ -256,8 +260,10 @@ extension GameEntryView {
                     }
                     myButton(action: {
                         if GameEntryNewGame {
+                            sm.isLoading = true
                             add()
                         } else {
+                            sm.isLoading = true
                             change()
                         }
                         GameEntryNewGame = false
@@ -278,6 +284,7 @@ extension GameEntryView {
         MyDefaults().Board = games.board
         games.add(BoardID: games.boardID, Board: boards.getName(myID: games.boardID), DatePlayed: datePlayed, WinnerID: winnerID, Player1ID: games.player1ID, Score1: score1, Player2ID: games.player2ID, Score2: score2) { rtnMessage in
             returnedMessage = rtnMessage
+            sm.isLoading = false
         }
     }
     func change() {
@@ -285,6 +292,7 @@ extension GameEntryView {
         myGame = changeRec
         games.change(game: changeRec) { rtnMessage in
             returnedMessage = rtnMessage
+            sm.isLoading = false
         }
     }
     func delete() {
