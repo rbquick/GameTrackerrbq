@@ -13,7 +13,10 @@ enum gametype: Int64 {
     case threePlayer = 3
     case fourPlayer = 4
 }
-struct Board: Identifiable, CloudKitableProtocol {
+
+
+struct Board: Identifiable, CloudKitableProtocol, CSVLoadable {
+
     let id: CKRecord.ID
     let Name: String
     let GameType: Int64
@@ -22,6 +25,15 @@ struct Board: Identifiable, CloudKitableProtocol {
     let myID: Int64
     let record: CKRecord
 
+    init?(raw: [String]) {
+        Name = raw[0]
+        GameType = Int64(raw[1]) ?? Int64(99.9)
+        minScore = Double(raw[2]) ?? 99.9
+        maxScore = Double(raw[3]) ?? 99.9
+        myID = Int64(raw[4]) ?? Int64(99.9)
+        record = CKRecord(recordType: myRecordType.Board.rawValue)
+        id = record.recordID
+    }
     init?(record: CKRecord) {
         self.id = record.recordID
         self.Name = record["Name"] as? String ?? "Brian"
@@ -41,7 +53,19 @@ struct Board: Identifiable, CloudKitableProtocol {
         record["myID"] = myID
         self.init(record: record)
     }
-
+    
+    enum StructNames: String, CaseIterable {
+        case Name = "Name"
+        case GameType = "GameType"
+        case minScore = "minScore"
+        case maxScore = "maxScore"
+        case myID = "myID"
+    }
+    let fieldNames = StructNames.allCases.map { $0.rawValue }
+    var csvHeadingLine: String {
+        return csvHeading(for: StructNames.self)
+    }
+    
     func update(Name: String, Gametype: Int64, minScore: Double, maxScore: Double) -> Board? {
         let record = record
         record["Name"] = Name
@@ -58,3 +82,5 @@ struct Board: Identifiable, CloudKitableProtocol {
         return Board(Name: "Cribbage", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 121, myID: 2)!
     }
 }
+
+

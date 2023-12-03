@@ -7,7 +7,8 @@
 
 import CloudKit
 
-struct Game: Identifiable, CloudKitableProtocol {
+struct Game: Identifiable, CloudKitableProtocol, CSVLoadable {
+
     let id: CKRecord.ID
     let BoardID: Int64
     let Board: String
@@ -20,6 +21,19 @@ struct Game: Identifiable, CloudKitableProtocol {
     let myID: Int64
     let record: CKRecord
 
+    init?(raw: [String]) {
+        BoardID = Int64(raw[0]) ?? Int64(99.9)
+        Board = raw[1]
+        DatePlayed = myDateFormatter(inDate: raw[2])
+        WinnerID = Int64(raw[3]) ?? Int64(99.9)
+        Player1ID = Int64(raw[4]) ?? Int64(99.9)
+        Score1 = Double(raw[5]) ?? Double(99.9)
+        Player2ID = Int64(raw[6]) ?? Int64(99.9)
+        Score2 = Double(raw[7]) ?? Double(99.9)
+        myID = Int64(raw[8]) ?? Int64(99.9)
+        record = CKRecord(recordType: myRecordType.Game.rawValue)
+        id = record.recordID
+    }
     init?(record: CKRecord) {
         self.id = record.recordID
         self.BoardID = record["BoardID"] as? Int64 ?? 0
@@ -46,6 +60,22 @@ struct Game: Identifiable, CloudKitableProtocol {
         record["myID"] = myID
         self.init(record: record)
     }
+    enum StructNames: String, CaseIterable {
+        case BoardID = "BoardID"
+        case Board = "Board"
+        case DatePlayed = "DatePlayed"
+        case WinnerID = "WinnerID"
+        case Player1ID = "Player1ID"
+        case Score1 = "Score1"
+        case Player2ID = "Player2ID"
+        case myIScore2D = "Score2"
+        case myID = "myID"
+    }
+    let fieldNames = StructNames.allCases.map { $0.rawValue }
+    var csvHeadingLine:String {
+        return csvHeading(for: StructNames.self)
+    }
+
     func update(BoardID: Int64, Board: String, DatePlayed: Date, WinnerID: Int64, Player1ID: Int64, Score1: Double, Player2ID: Int64, Score2: Double) -> Game? {
         let record = record
         record["BoardID"] = BoardID
@@ -64,5 +94,8 @@ struct Game: Identifiable, CloudKitableProtocol {
     }
     static func example2() -> Game {
         return Game(BoardID: 1, Board: "Euchre", DatePlayed: Date(), WinnerID: 1, Player1ID: 2, Score1: 10, Player2ID: 1, Score2: 2, myID: 2)!
+    }
+    static func NoGames() -> Game {
+        return Game(BoardID: 1, Board: "NoGames", DatePlayed: Date(), WinnerID: 1, Player1ID: 2, Score1: 10, Player2ID: 1, Score2: 2, myID: 2)!
     }
 }

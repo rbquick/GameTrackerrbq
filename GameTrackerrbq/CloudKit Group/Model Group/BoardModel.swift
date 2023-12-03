@@ -42,6 +42,7 @@ class Boards: ObservableObject {
         sectionDictionary = [:]
         sectionDictionary = getSectionedDictionary()
     }
+
     func getSectionedDictionary() -> Dictionary <String , [Board]> {
         let sectionDictionary: Dictionary<String, [Board]> = {
             return Dictionary(grouping: boards, by: {

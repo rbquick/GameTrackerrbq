@@ -14,7 +14,7 @@ struct ColorDefaults: View {
     @State private var gradientOne: myColors = myColors.red
     @State private var showColorPicker = false
     @EnvironmentObject var sm: StateManager
-    var openingTabs = ["Login", "New Game", "Reporting", "Maintenance"]
+    var openingTabs = ["Login", "New Game", "Reporting", "Maintenance", "csvExportImport"]
     @State private var openingTabName = "Reporting"
     var body: some View {
 

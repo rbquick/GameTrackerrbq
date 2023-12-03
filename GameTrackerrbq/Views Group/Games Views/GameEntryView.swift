@@ -123,6 +123,18 @@ struct GameEntryView: View {
 
                                             Text("\(players.getName(myID: games.player1ID)) won: \(games.rubbersPlayer1Total)")
                                             Text("\(players.getName(myID: games.player2ID)) won: \(games.rubbersPlayer2Total)")
+                                            myButton(action: {
+                                                games.fetchAllRestricted = false
+                                                sm.isLoading = true
+                                                games.fetchSelective(board: games.boardID, player1ID: games.player1ID, player2ID: games.player2ID) { rtnMessage in
+                                                    returnedMessage = rtnMessage
+                                                    games.sectionDictionary = [:]
+                                                    games.sectionDictionary = games.getSectionedDictionary()
+                                                    sm.isLoading = false
+                                                }
+                                            }) {
+                                                Text("Get All")
+                                            }
                                         }.id(2)
                                     }
                                     Spacer(minLength: 500)
@@ -169,14 +181,17 @@ struct GameEntry_Previews: PreviewProvider {
 
 extension GameEntryView {
     func setInitialGame() {
-        games.player1 = String(games.games[0].Player1ID)
-        games.player2 = String(games.games[0].Player2ID)
-        winner = games.player1
-        games.board = String(games.games[0].BoardID)
-        myBoard =  boards.boards.first(where: {$0.myID == games.boardID}) ?? Board(Name: "Unknown", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 0, myID: 0)!
+        if games.games.count > 0 {
+            games.player1 = String(games.games[0].Player1ID)
+            games.player2 = String(games.games[0].Player2ID)
+            winner = games.player1
+            games.board = String(games.games[0].BoardID)
+            myBoard =  boards.boards.first(where: {$0.myID == games.boardID}) ?? Board(Name: "Unknown", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 0, myID: 0)!
+        }
         print("setInitialGame DONE")
 //        CountRubbers()
     }
+
 
     private var GameSelection: some View {
         VStack {
@@ -191,7 +206,18 @@ extension GameEntryView {
                 //rbq boardID = Int64(board) ?? 910
                 myBoard =  boards.boards.first(where: {$0.myID == games.boardID}) ?? Board(Name: "Unknown", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 0, myID: 0)!
                 setPlayersForBoard(board: myBoard)
+                fillSelectedGames()
             }
+        }
+    }
+    func fillSelectedGames() {
+        games.fetchAllRestricted = false
+        sm.isLoading = true
+        games.fetchSelective(board: games.boardID, player1ID: games.player1ID, player2ID: games.player2ID) { rtnMessage in
+            returnedMessage = rtnMessage
+            games.sectionDictionary = [:]
+            games.sectionDictionary = games.getSectionedDictionary()
+            sm.isLoading = false
         }
     }
     func setPlayersForBoard(board: Board) {
@@ -211,7 +237,11 @@ extension GameEntryView {
                         }
                     }
                     .myButtonViewStyle(width: CGFloat(pickerWidth))
+                    .onChange(of: games.player1) { selection in
+                        fillSelectedGames()
+                    }
                 }
+
                 VStack {
                     Text("player2 = \(games.player2)")
                     Picker("", selection: $games.player2) {
@@ -220,13 +250,22 @@ extension GameEntryView {
                         }
                     }
                     .myButtonViewStyle(width: CGFloat(pickerWidth))
+                    .onChange(of: games.player2) { selection in
+                        fillSelectedGames()
+                    }
                 }
             }
+            
         }
     }
     private var GameEntrySelect: some View {
 
             VStack{
+                if GameEntryShowing {
+                    Spacer()
+                    Text("\(boards.getName(myID: games.boardID))")
+                    Spacer()
+                }
             HStack {
                 if !GameEntryShowing {
                     Text("New Game")
@@ -243,6 +282,7 @@ extension GameEntryView {
                     }
                 }
                 if GameEntryShowing {
+
                     Text("Game options")
                     if !GameEntryNewGame {
                         myButton(action: {
@@ -259,15 +299,16 @@ extension GameEntryView {
                         Text("Cancel")
                     }
                     myButton(action: {
+                        sm.isLoading = true
                         if GameEntryNewGame {
-                            sm.isLoading = true
                             add()
                         } else {
-                            sm.isLoading = true
                             change()
                         }
+
                         GameEntryNewGame = false
                         GameEntryShowing.toggle()
+
                     }) {
                         Text("Finish")
                     }
@@ -275,6 +316,7 @@ extension GameEntryView {
             }.uses(alertManager)
             if GameEntryShowing {
                 GameEntryViewEntering
+                Spacer()
             }
         }
     }
@@ -405,9 +447,10 @@ extension GameEntryView {
                             GameEntryEditingIdx = idx
                             GameEntryShowing.toggle()
                         }, content: { GameLineView(game: games.GlistGames[idx])}, width: geo.size.width, height: 51)
-                        
-                        
+
+
                     }
+                  //  .id(UUID())
                 }
             }
             .myBackgroundStyle()

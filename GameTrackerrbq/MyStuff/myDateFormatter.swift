@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+func myDateFormatter(inDate: String, inFormat: String = "yyyy-MM-dd HH:mm:ss Z") -> Date {
+    let inputFormatter = DateFormatter()
+    inputFormatter.dateFormat = inFormat
+    if let outputDate = inputFormatter.date(from: inDate) {
+        return outputDate
+    } else {
+        return Date()
+    }
+}
 func myDateFormatter(inDate: String, inFormat: String = "yyyy-MM-dd", outFormat: String = "yyyy-MM-dd") -> String {
     let inputFormatter = DateFormatter()
     inputFormatter.dateFormat = inFormat

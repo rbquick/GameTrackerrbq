@@ -55,6 +55,9 @@
 		71AF153B2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF153A2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift */; };
 		71AF153D29526656006FD2C8 /* ParticlesModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF153C29526656006FD2C8 /* ParticlesModifier.swift */; };
 		71AF153F29526751006FD2C8 /* FireworkParticlesContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF153E29526751006FD2C8 /* FireworkParticlesContentView.swift */; };
+		71D089272B1A09CB00385B33 /* csvHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D089262B1A09CB00385B33 /* csvHeading.swift */; };
+		71D089292B1A0DAF00385B33 /* csvFileHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D089282B1A0DAF00385B33 /* csvFileHandling.swift */; };
+		71D0892B2B1A2EB700385B33 /* csvExportImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D0892A2B1A2EB700385B33 /* csvExportImport.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -107,6 +110,9 @@
 		71AF153A2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworkParticlesGeometryEffect.swift; sourceTree = "<group>"; };
 		71AF153C29526656006FD2C8 /* ParticlesModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticlesModifier.swift; sourceTree = "<group>"; };
 		71AF153E29526751006FD2C8 /* FireworkParticlesContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworkParticlesContentView.swift; sourceTree = "<group>"; };
+		71D089262B1A09CB00385B33 /* csvHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = csvHeading.swift; sourceTree = "<group>"; };
+		71D089282B1A0DAF00385B33 /* csvFileHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = csvFileHandling.swift; sourceTree = "<group>"; };
+		71D0892A2B1A2EB700385B33 /* csvExportImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = csvExportImport.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +182,7 @@
 		71AF14E5294E05EF006FD2C8 /* MyStuff */ = {
 			isa = PBXGroup;
 			children = (
+				71D089252B1A097A00385B33 /* csvGroup */,
 				71AF14E6294E05EF006FD2C8 /* Logging.swift */,
 				71AF14E7294E05EF006FD2C8 /* StateManager.swift */,
 				71AF14E8294E05EF006FD2C8 /* Logger.swift */,
@@ -304,6 +311,16 @@
 			path = Fireworks;
 			sourceTree = "<group>";
 		};
+		71D089252B1A097A00385B33 /* csvGroup */ = {
+			isa = PBXGroup;
+			children = (
+				71D089262B1A09CB00385B33 /* csvHeading.swift */,
+				71D089282B1A0DAF00385B33 /* csvFileHandling.swift */,
+				71D0892A2B1A2EB700385B33 /* csvExportImport.swift */,
+			);
+			path = csvGroup;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -384,6 +401,7 @@
 				71AF1533294E0617006FD2C8 /* GamesMaintenanceView.swift in Sources */,
 				71AF151C294E0609006FD2C8 /* BoardRec.swift in Sources */,
 				71AF14F8294E05EF006FD2C8 /* StateManager.swift in Sources */,
+				71D089292B1A0DAF00385B33 /* csvFileHandling.swift in Sources */,
 				71AF14FF294E05EF006FD2C8 /* SearchBar.swift in Sources */,
 				71AF1534294E0617006FD2C8 /* PlayersGamesView.swift in Sources */,
 				71AF1535294E0617006FD2C8 /* ColorMaintenanceView.swift in Sources */,
@@ -404,9 +422,11 @@
 				71AF14FA294E05EF006FD2C8 /* DeviceRotation.swift in Sources */,
 				71AF1504294E05EF006FD2C8 /* myDateFormatter.swift in Sources */,
 				71AF153B2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift in Sources */,
+				71D0892B2B1A2EB700385B33 /* csvExportImport.swift in Sources */,
 				71AF1503294E05EF006FD2C8 /* HoleStyle.swift in Sources */,
 				71AF1501294E05EF006FD2C8 /* View+ReadSize.swift in Sources */,
 				71AF1531294E0617006FD2C8 /* GameEntryView.swift in Sources */,
+				71D089272B1A09CB00385B33 /* csvHeading.swift in Sources */,
 				71AF152F294E0617006FD2C8 /* PlayersListView.swift in Sources */,
 				71AF1517294E0609006FD2C8 /* Model.swift in Sources */,
 				71AF150A294E05FD006FD2C8 /* myColors.swift in Sources */,

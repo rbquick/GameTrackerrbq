@@ -8,7 +8,11 @@
 import CloudKit
 import Combine
 
-class Games: ObservableObject {
+class Games: ObservableObject, Equatable {
+    static func == (lhs: Games, rhs: Games) -> Bool {
+        return true
+    }
+
     @Published var games = [Game]()
     @Published var sectionDictionary : Dictionary<String , [Game]>
     @Published var isPresenting = [Bool]()
@@ -16,6 +20,8 @@ class Games: ObservableObject {
     @Published var isChanged: Int = 0
     @Published var errorMessage: String? = nil
     @Published var canDeleteGame: Bool = false
+    @Published var fetchAllRestricted: Bool = true
+    @Published var fetchAllRestrictedCount: Int = 5
 
     // screen input fields are strings and then accessing fields are Int64
     @Published var board: String = "" {
@@ -67,21 +73,26 @@ class Games: ObservableObject {
         }
     }
     var player1TodayGamesWon: [Game] {
+
+        //return [Game]()
         return todayGames.filter { game in
             self.player1ID == game.WinnerID
         }
     }
     var player2TodayGamesWon: [Game] {
+        //return [Game]()
         return todayGames.filter { game in
             self.player2ID == game.WinnerID
         }
     }
     var player1TotalGamesWon: [Game] {
+        //return [Game]()
         return self.GlistGames.filter { game in
             self.player1ID == game.WinnerID
         }
     }
     var player2TotalGamesWon: [Game] {
+        //return [Game]()
         return self.GlistGames.filter { game in
             self.player2ID == game.WinnerID
         }
@@ -105,6 +116,7 @@ class Games: ObservableObject {
     //        rubbersPlayer2Total = CountOneRubber(myGames: listGames, playerID: Int64(player2) ?? 0)
     //    }
         func CountOneRubber(myGames: [Game], playerID: Int64) -> Int {
+           //return 999
             if myGames.count == 0 { return 0 }
             var playerwins = 0
             var otherwins = 0
@@ -257,7 +269,7 @@ func getSectionedDictionary() -> Dictionary <String , [Game]> {
                 switch c {
                 case .finished:
                   //  self.GlistGamesBuild()
-                    self.tracing(function: "add .finished")
+                    self.tracing(function: "delete .finished")
                     completion("Game deleted")
                 case .failure(let error):
                     self.tracing(function: "change error = \(error.localizedDescription)")
@@ -269,10 +281,62 @@ func getSectionedDictionary() -> Dictionary <String , [Game]> {
             }
             .store(in: &cancellables)
     }
+    func fetchSelective(board: Int64, player1ID: Int64, player2ID: Int64, _ completion: @escaping (String) -> ()) {
+        tracing(function: "fetchAll enter")
+        let predicate = NSPredicate(format:"BoardID == %@ AND Player1ID == %@ AND Player2ID == %@", NSNumber(value: board), NSNumber(value: player1ID), NSNumber(value: player2ID))
+        let sort = [
+            NSSortDescriptor(key: "BoardID", ascending: true),
+            NSSortDescriptor(key: "DatePlayed", ascending: false)
+        ]
+        CloudKitUtility.fetchAll(predicate: predicate, recordType: myRecordType.Game.rawValue, sortDescriptions: sort)
+            .receive(on: DispatchQueue.main)
+            .sink { c in
+                switch c {
+                case .finished:
+//                    if self.games.count > 0 {
+////                        self.player1 = String(self.games[0].Player1ID)
+////                        self.player2 = String(self.games[0].Player2ID)
+////                        self.board = String(self.games[0].BoardID)
+//                    } else {
+//                        self.games.append(Game.NoGames())
+//                    }
+                    // build new table of records and strip for performance
+                    if self.fetchAllRestricted {
+                        var selectedgames = [Game]()
+                        var currentBoardID: Int64 = 0
+                        var currentCount: Int = 0
+                        for  game in self.games {
+                            if game.BoardID != currentBoardID {
+                                currentCount = 0
+                                currentBoardID = game.BoardID
+                            }
+                            if currentCount < self.fetchAllRestrictedCount {
+                                currentCount += 1
+                                selectedgames.append(game)
+                            }
+                        }
+                        self.games = selectedgames
+                    }
+                  //  self.GlistGamesBuild()
+                    self.tracing(function: "fetchAll .finished games.count = \(self.games.count)")
+                    completion("fetchAll Completed")
+                case .failure(let error):
+                    self.tracing(function: "fetchAll error = \(error.localizedDescription)")
+                }
+            } receiveValue: { [weak self] returnedItems in
+                self?.games = returnedItems
+
+            }
+            .store(in: &cancellables)
+        tracing(function: "fetchAll exit")
+    }
     func fetchAll(_ completion: @escaping (String) -> ()) {
         tracing(function: "fetchAll enter")
         let predicate = NSPredicate(value: true)
-        let sort = [NSSortDescriptor(key: "DatePlayed", ascending: false)]
+        let sort = [
+            NSSortDescriptor(key: "BoardID", ascending: true),
+            NSSortDescriptor(key: "DatePlayed", ascending: false)
+        ]
         CloudKitUtility.fetchAll(predicate: predicate, recordType: myRecordType.Game.rawValue, sortDescriptions: sort)
             .receive(on: DispatchQueue.main)
             .sink { c in
@@ -283,8 +347,25 @@ func getSectionedDictionary() -> Dictionary <String , [Game]> {
                         self.player2 = String(self.games[0].Player2ID)
                         self.board = String(self.games[0].BoardID)
                     }
+                    // build new table of records and strip for performance
+                    if self.fetchAllRestricted {
+                        var selectedgames = [Game]()
+                        var currentBoardID: Int64 = 0
+                        var currentCount: Int = 0
+                        for  game in self.games {
+                            if game.BoardID != currentBoardID {
+                                currentCount = 0
+                                currentBoardID = game.BoardID
+                            }
+                            if currentCount < self.fetchAllRestrictedCount {
+                                currentCount += 1
+                                selectedgames.append(game)
+                            }
+                        }
+                        self.games = selectedgames
+                    }
                   //  self.GlistGamesBuild()
-                    self.tracing(function: "fetchAll .finished")
+                    self.tracing(function: "fetchAll .finished games.count = \(self.games.count)")
                     completion("fetchAll Completed")
                 case .failure(let error):
                     self.tracing(function: "fetchAll error = \(error.localizedDescription)")
