@@ -130,6 +130,16 @@ class MyDefaults {
         }
         set { defaults.setValue(newValue, forKey: "Player2ID") }
     }
+    var BoardID: Int64 {
+        get {
+            let lastBoardID = defaults.integer(forKey: "BoardID")
+            if lastBoardID != 0 {
+                return Int64(lastBoardID)
+            }
+            return Int64(2)
+        }
+        set { defaults.setValue(newValue, forKey: "BoardID") }
+    }
     var Board: String {
         get {
             let lastBoard = defaults.string(forKey: "Board")

@@ -36,28 +36,28 @@ struct Game: Identifiable, CloudKitableProtocol, CSVLoadable {
     }
     init?(record: CKRecord) {
         self.id = record.recordID
-        self.BoardID = record["BoardID"] as? Int64 ?? 0
-        self.Board = record["Board"] as? String ?? ""
-        self.DatePlayed = record["DatePlayed"] as? Date ?? Date()
-        self.WinnerID = record["WinnerID"] as? Int64 ?? 0
-        self.Player1ID = record["Player1ID"] as? Int64 ?? 0
-        self.Score1 = record["Score1"] as? Double ?? 0
-        self.Player2ID = record["Player2ID"] as? Int64 ?? 0
-        self.Score2 = record["Score2"] as? Double ?? 0
-        self.myID = record["myID"] as? Int64 ?? 0
+        self.BoardID = record[StructNames.BoardID.rawValue] as? Int64 ?? 0
+        self.Board = record[StructNames.Board.rawValue] as? String ?? ""
+        self.DatePlayed = record[StructNames.DatePlayed.rawValue] as? Date ?? Date()
+        self.WinnerID = record[StructNames.WinnerID.rawValue] as? Int64 ?? 0
+        self.Player1ID = record[StructNames.Player1ID.rawValue] as? Int64 ?? 0
+        self.Score1 = record[StructNames.Score1.rawValue] as? Double ?? 0
+        self.Player2ID = record[StructNames.Player2ID.rawValue] as? Int64 ?? 0
+        self.Score2 = record[StructNames.Score2.rawValue] as? Double ?? 0
+        self.myID = record[StructNames.myID.rawValue] as? Int64 ?? 0
         self.record = record
     }
     init?(BoardID: Int64, Board: String, DatePlayed: Date, WinnerID: Int64, Player1ID: Int64, Score1: Double, Player2ID: Int64, Score2: Double, myID: Int64) {
         let record = CKRecord(recordType: myRecordType.Game.rawValue)
-        record["BoardID"] = BoardID
-        record["Board"] = Board
-        record["DatePlayed"] = DatePlayed
-        record["WinnerID"] = WinnerID
-        record["Player1ID"] = Player1ID
-        record["Score1"] = Score1
-        record["Player2ID"] = Player2ID
-        record["Score2"] = Score2
-        record["myID"] = myID
+        record[StructNames.BoardID.rawValue] = BoardID
+        record[StructNames.Board.rawValue] = Board
+        record[StructNames.DatePlayed.rawValue] = DatePlayed
+        record[StructNames.WinnerID.rawValue] = WinnerID
+        record[StructNames.Player1ID.rawValue] = Player1ID
+        record[StructNames.Score1.rawValue] = Score1
+        record[StructNames.Player2ID.rawValue] = Player2ID
+        record[StructNames.Score2.rawValue] = Score2
+        record[StructNames.myID.rawValue] = myID
         self.init(record: record)
     }
     enum StructNames: String, CaseIterable {
@@ -68,7 +68,7 @@ struct Game: Identifiable, CloudKitableProtocol, CSVLoadable {
         case Player1ID = "Player1ID"
         case Score1 = "Score1"
         case Player2ID = "Player2ID"
-        case myIScore2D = "Score2"
+        case Score2 = "Score2"
         case myID = "myID"
     }
     let fieldNames = StructNames.allCases.map { $0.rawValue }
@@ -78,14 +78,14 @@ struct Game: Identifiable, CloudKitableProtocol, CSVLoadable {
 
     func update(BoardID: Int64, Board: String, DatePlayed: Date, WinnerID: Int64, Player1ID: Int64, Score1: Double, Player2ID: Int64, Score2: Double) -> Game? {
         let record = record
-        record["BoardID"] = BoardID
-        record["Board"] = Board
-        record["DatePlayed"] = DatePlayed
-        record["WinnerID"] = WinnerID
-        record["Player1ID"] = Player1ID
-        record["Score1"] = Score1
-        record["Player2ID"] = Player2ID
-        record["Score2"] = Score2
+        record[StructNames.BoardID.rawValue] = BoardID
+        record[StructNames.Board.rawValue] = Board
+        record[StructNames.DatePlayed.rawValue] = DatePlayed
+        record[StructNames.WinnerID.rawValue] = WinnerID
+        record[StructNames.Player1ID.rawValue] = Player1ID
+        record[StructNames.Score1.rawValue] = Score1
+        record[StructNames.Player2ID.rawValue] = Player2ID
+        record[StructNames.Score2.rawValue] = Score2
         return Game(record: record)
     }
 

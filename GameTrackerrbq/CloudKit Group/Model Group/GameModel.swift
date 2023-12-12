@@ -20,23 +20,23 @@ class Games: ObservableObject, Equatable {
     @Published var isChanged: Int = 0
     @Published var errorMessage: String? = nil
     @Published var canDeleteGame: Bool = false
-    @Published var fetchAllRestricted: Bool = true
+    @Published var fetchAllRestricted: Bool = false
     @Published var fetchAllRestrictedCount: Int = 5
 
     // screen input fields are strings and then accessing fields are Int64
-    @Published var board: String = "" {
+    @Published var board: String = "1" {
         didSet {
             self.boardID = Int64(board) ?? 0
         }
     }
     @Published var boardID: Int64 = 0
-    @Published var player1: String = "" {
+    @Published var player1: String = "1" {
         didSet {
             self.player1ID = Int64(player1) ?? 0
         }
     }
     @Published var player1ID: Int64 = 0
-    @Published var player2: String = "" {
+    @Published var player2: String = "2" {
         didSet {
             self.player2ID = Int64(player2) ?? 0
         }
@@ -61,8 +61,8 @@ class Games: ObservableObject, Equatable {
         }
     }
     var lastDate: Date {
-        if self.GlistGames.count > 0 {
-            return self.GlistGames[0].DatePlayed
+        if self.games.count > 0 {
+            return self.games[0].DatePlayed
         } else {
             return Date()
         }
@@ -85,18 +85,20 @@ class Games: ObservableObject, Equatable {
             self.player2ID == game.WinnerID
         }
     }
-    var player1TotalGamesWon: [Game] {
-        //return [Game]()
-        return self.GlistGames.filter { game in
-            self.player1ID == game.WinnerID
-        }
-    }
-    var player2TotalGamesWon: [Game] {
-        //return [Game]()
-        return self.GlistGames.filter { game in
-            self.player2ID == game.WinnerID
-        }
-    }
+    @Published var player1TotalGamesWon: Int = 0
+    @Published var player2TotalGamesWon: Int = 0
+//    var player1TotalGamesWon: [Game] {
+//        //return [Game]()
+//        return self.GlistGames.filter { game in
+//            self.player1ID == game.WinnerID
+//        }
+//    }
+//    var player2TotalGamesWon: [Game] {
+//        //return [Game]()
+//        return self.GlistGames.filter { game in
+//            self.player2ID == game.WinnerID
+//        }
+//    }
     var rubbersPlayer1Today: Int {
         return CountOneRubber(myGames: self.todayGames, playerID: self.player1ID)
     }
@@ -159,7 +161,7 @@ class Games: ObservableObject, Equatable {
     var isTracing: Bool = true
     func tracing(function: String) {
         if isTracing {
-            print("Games \(function) ")
+            print("\(Date()):Games \(function) ")
             Logger.log("Games \(function)")
         }
     }
@@ -282,7 +284,7 @@ func getSectionedDictionary() -> Dictionary <String , [Game]> {
             .store(in: &cancellables)
     }
     func fetchSelective(board: Int64, player1ID: Int64, player2ID: Int64, _ completion: @escaping (String) -> ()) {
-        tracing(function: "fetchAll enter")
+        tracing(function: "fetchSelective enter board: \(board), player1ID: \(player1ID), player2ID: \(player2ID)")
         let predicate = NSPredicate(format:"BoardID == %@ AND Player1ID == %@ AND Player2ID == %@", NSNumber(value: board), NSNumber(value: player1ID), NSNumber(value: player2ID))
         let sort = [
             NSSortDescriptor(key: "BoardID", ascending: true),
@@ -293,19 +295,19 @@ func getSectionedDictionary() -> Dictionary <String , [Game]> {
             .sink { c in
                 switch c {
                 case .finished:
-//                    if self.games.count > 0 {
-////                        self.player1 = String(self.games[0].Player1ID)
-////                        self.player2 = String(self.games[0].Player2ID)
-////                        self.board = String(self.games[0].BoardID)
-//                    } else {
-//                        self.games.append(Game.NoGames())
-//                    }
                     // build new table of records and strip for performance
-                    if self.fetchAllRestricted {
-                        var selectedgames = [Game]()
-                        var currentBoardID: Int64 = 0
-                        var currentCount: Int = 0
-                        for  game in self.games {
+                    var selectedgames = [Game]()
+                    var currentBoardID: Int64 = 0
+                    var currentCount: Int = 0
+                    self.player1TotalGamesWon = 0
+                    self.player2TotalGamesWon = 0
+                    for  game in self.games {
+                        if game.Player1ID == game.WinnerID {
+                            self.player1TotalGamesWon += 1
+                        } else {
+                            self.player2TotalGamesWon += 1
+                        }
+                        if self.fetchAllRestricted {
                             if game.BoardID != currentBoardID {
                                 currentCount = 0
                                 currentBoardID = game.BoardID
@@ -315,20 +317,22 @@ func getSectionedDictionary() -> Dictionary <String , [Game]> {
                                 selectedgames.append(game)
                             }
                         }
-                        self.games = selectedgames
                     }
-                  //  self.GlistGamesBuild()
-                    self.tracing(function: "fetchAll .finished games.count = \(self.games.count)")
+                        if self.fetchAllRestricted {
+                            self.games = selectedgames
+                        }
+                    //  self.GlistGamesBuild()
+                    self.tracing(function: "fetchSelective .finished games.count = \(self.games.count)")
                     completion("fetchAll Completed")
                 case .failure(let error):
-                    self.tracing(function: "fetchAll error = \(error.localizedDescription)")
+                    self.tracing(function: "fetchSelective error = \(error.localizedDescription)")
                 }
             } receiveValue: { [weak self] returnedItems in
                 self?.games = returnedItems
 
             }
             .store(in: &cancellables)
-        tracing(function: "fetchAll exit")
+        tracing(function: "fetchSelective exit")
     }
     func fetchAll(_ completion: @escaping (String) -> ()) {
         tracing(function: "fetchAll enter")
@@ -380,7 +384,8 @@ func getSectionedDictionary() -> Dictionary <String , [Game]> {
     func findFirstForBoard(board: Board) -> Game {
         var thisGame = games.first(where: { $0.BoardID == board.myID })
         if thisGame == nil {
-            thisGame = Game(BoardID: 0, Board: "Unknown", DatePlayed: Date(), WinnerID: 0, Player1ID: 0, Score1: 0, Player2ID: 0, Score2: 0, myID: 0)
+            // set the unknown game to valid players
+            thisGame = Game(BoardID: 0, Board: "Unknown", DatePlayed: Date(), WinnerID: 0, Player1ID: 1, Score1: 0, Player2ID: 1, Score2: 0, myID: 0)
         }
         return thisGame!
     }

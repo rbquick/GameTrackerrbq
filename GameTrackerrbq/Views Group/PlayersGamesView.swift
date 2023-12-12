@@ -46,7 +46,11 @@ struct PlayersGamesView: View {
                     }
                 }
                 .onAppear() {
+                    games.fetchAllRestricted = false
+                    games.fetchAll { game in
+
                     BuildResults()
+                    }
                 }
             }
         }

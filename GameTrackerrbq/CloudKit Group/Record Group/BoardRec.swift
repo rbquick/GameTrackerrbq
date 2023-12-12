@@ -36,21 +36,21 @@ struct Board: Identifiable, CloudKitableProtocol, CSVLoadable {
     }
     init?(record: CKRecord) {
         self.id = record.recordID
-        self.Name = record["Name"] as? String ?? "Brian"
-        self.GameType = record["GameType"] as? gametype.RawValue ?? gametype.twoPlayer.rawValue
-        self.minScore = record["minScore"] as? Double ?? 0
-        self.maxScore = record["maxScore"] as? Double ?? 10
-        self.myID = record["myID"] as? Int64 ?? 1
+        self.Name = record[StructNames.Name.rawValue] as? String ?? "Brian"
+        self.GameType = record[StructNames.GameType.rawValue] as? gametype.RawValue ?? gametype.twoPlayer.rawValue
+        self.minScore = record[StructNames.minScore.rawValue] as? Double ?? 0
+        self.maxScore = record[StructNames.maxScore.rawValue] as? Double ?? 10
+        self.myID = record[StructNames.myID.rawValue] as? Int64 ?? 1
         self.record = record
     }
 
     init?(Name: String, GameType: Int64, minScore: Double, maxScore: Double, myID: Int64) {
         let record = CKRecord(recordType: myRecordType.Board.rawValue)
-        record["Name"] = Name
-        record["GameType"] = GameType
-        record["minScore"] = minScore
-        record["maxScore"] = maxScore
-        record["myID"] = myID
+        record[StructNames.Name.rawValue] = Name
+        record[StructNames.GameType.rawValue] = GameType
+        record[StructNames.minScore.rawValue] = minScore
+        record[StructNames.maxScore.rawValue] = maxScore
+        record[StructNames.myID.rawValue] = myID
         self.init(record: record)
     }
     
@@ -68,10 +68,10 @@ struct Board: Identifiable, CloudKitableProtocol, CSVLoadable {
     
     func update(Name: String, Gametype: Int64, minScore: Double, maxScore: Double) -> Board? {
         let record = record
-        record["Name"] = Name
-        record["GameType"] = GameType
-        record["minScore"] = minScore
-        record["maxScore"] = maxScore
+        record[StructNames.Name.rawValue] = Name
+        record[StructNames.GameType.rawValue] = GameType
+        record[StructNames.minScore.rawValue] = minScore
+        record[StructNames.maxScore.rawValue] = maxScore
         return Board(record: record)
     }
 

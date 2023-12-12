@@ -22,7 +22,7 @@ class Players: ObservableObject {
     var isTracing: Bool = false
     func tracing(function: String) {
         if isTracing {
-            print("Players \(function) ")
+            print("\(Date()):Players \(function) ")
             Logger.log("Players \(function)")
         }
     }
@@ -54,6 +54,7 @@ class Players: ObservableObject {
         }()
         return sectionDictionary
     }
+    // This is done to select nothing for a player?
     func BlankAdd() {
         if players.count > 0 {
             if players[0].Name != "" {
@@ -98,6 +99,13 @@ class Players: ObservableObject {
     func getPlayerName(myID: String) -> String {
         return getName(myID: Int64(myID) ?? 0)
 
+    }
+    func getmyIDFromStringID(myID: String) -> Int64 {
+        var idx = 0
+        if let index = players.firstIndex(where: {$0.myID == Int64(myID)}) {
+            idx = index
+        }
+        return players[idx].myID
     }
     func findPlayersRecord(Name: String) -> Player {
 

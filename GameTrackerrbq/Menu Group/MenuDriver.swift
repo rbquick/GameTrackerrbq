@@ -150,8 +150,8 @@ extension MenuDriver {
                     returnedMessage = rtnMessage
                     boards.sectionDictionary = [:]
                     boards.sectionDictionary = boards.getSectionedDictionary()
-
-                    games.fetchAll() { rtnMessage in
+                    games.fetchSelective(board: MyDefaults().BoardID, player1ID: MyDefaults().Player1ID, player2ID: MyDefaults().Player2ID) {
+                        rtnMessage in
                         returnedMessage = rtnMessage
                         games.sectionDictionary = [:]
                         games.sectionDictionary = games.getSectionedDictionary()

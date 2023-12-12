@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import CloudKit
+import Combine
 
 struct csvExportImport: View {
+    @EnvironmentObject var sm: StateManager
     @EnvironmentObject var boards: Boards
     @EnvironmentObject var players: Players
     @EnvironmentObject var games: Games
@@ -21,6 +24,10 @@ struct csvExportImport: View {
     @State private var showingGameExporter = false
     @State private var showingGameImporter = false
 
+
+    @State var cancellables = Set<AnyCancellable>()
+    @State private var returnedMessage = ""
+
     @State private var aDate: Date = myDateFormatter(inDate:  "2023-11-22 20:39:32 +0000")
     var body: some View {
     VStack {
@@ -31,12 +38,17 @@ struct csvExportImport: View {
                     Text("There are \(boards.boards.count) boards on file")
                     Text("\(Board.example1().csvHeadingLine)")
                     myButton(action: {
-                        showingBoardExporter.toggle()
+                        boards.fetchAll() { rtnMessage in
+                            returnedMessage = rtnMessage
+                            players.sectionDictionary = [:]
+                            players.sectionDictionary = players.getSectionedDictionary()
+                            showingBoardExporter.toggle()
+                        }
                     }, content: {
                         Text("Export Boards")
                     }, width: buttonWidth
                     )
-                    .fileMover(isPresented: $showingBoardExporter, file: fileURLBoard()) { result in
+                    .fileMover(isPresented: $showingBoardExporter, file: Board.example1().csvfileURL(from: boards.boards, outFile: "Boards.csv")) { result in
                         switch result {
                         case .success(let url):
                             print("Saved to \(url)")
@@ -46,7 +58,18 @@ struct csvExportImport: View {
                     }
 
                     myButton(action: {
-                        showingBoardImporter.toggle()
+                        var myBoards = [Board]()
+                        let predicate = NSPredicate(value: true)
+                        CloudKitUtility.getAllRecordsAndDelete(predicate: predicate, recordType: myRecordType.Board.rawValue)
+                            .receive(on: DispatchQueue.main)
+                            .sink { _ in
+                                print("delete count = \(myBoards.count)")
+                                showingBoardImporter.toggle()
+                            } receiveValue: { returnedBoards in
+                                myBoards = returnedBoards
+                            }
+                            .store(in: &cancellables)
+
                     }, content: {
                         Text("Import Boards")
                     }, width: buttonWidth
@@ -62,6 +85,12 @@ struct csvExportImport: View {
                                 guard let data = String(data: try Data(contentsOf: selectedFile), encoding: .utf8) else { return }
                                 defer { selectedFile.stopAccessingSecurityScopedResource() }
                                 boards.boards = Board.dataToStructGeneric(data: data)
+                                var newBoards:[CKRecord] = []
+                                for board in boards.boards {
+                                    let newRec = Board(Name: board.Name, GameType: board.GameType, minScore: board.minScore, maxScore: board.maxScore, myID: board.myID)!
+                                    newBoards.append(newRec.record)
+                                }
+                                CloudKitUtility.saveAllRecords(newBoards)
                             } else {
                                 // Handle denied access
                             }
@@ -75,13 +104,12 @@ struct csvExportImport: View {
                     }
                 }
         }
-        .hiddenConditionally(boards.boards.count == 0)
 
         Group {
         Divider()
             .overlay(Color.red)
                 VStack(spacing: 0) {
-                    Text("There are \(players.players.count) boards on file")
+                    Text("There are \(players.players.count) players on file")
                     Text("\(Player.example1().csvHeadingLine)")
                     myButton(action: {
                         showingPlayerExporter.toggle()
@@ -89,7 +117,7 @@ struct csvExportImport: View {
                         Text("Export Players")
                     }, width: buttonWidth
                     )
-                    .fileMover(isPresented: $showingPlayerExporter, file: fileURLPlayer()) { result in
+                    .fileMover(isPresented: $showingPlayerExporter, file: Player.example1().csvfileURL(from: players.players, outFile: "Players.csv")) { result in
                         switch result {
                         case .success(let url):
                             print("Saved to \(url)")
@@ -99,7 +127,17 @@ struct csvExportImport: View {
                     }
 
                     myButton(action: {
-                        showingPlayerImporter.toggle()
+                        var myPlayers = [Player]()
+                        let predicate = NSPredicate(value: true)
+                        CloudKitUtility.getAllRecordsAndDelete(predicate: predicate, recordType: myRecordType.Player.rawValue)
+                            .receive(on: DispatchQueue.main)
+                            .sink { _ in
+                                print("delete count = \(myPlayers.count)")
+                                showingPlayerImporter.toggle()
+                            } receiveValue: { returnedPlayers in
+                                myPlayers = returnedPlayers
+                            }
+                            .store(in: &cancellables)
                     }, content: {
                         Text("Import Players")
                     }, width: buttonWidth
@@ -115,6 +153,12 @@ struct csvExportImport: View {
                                 guard let data = String(data: try Data(contentsOf: selectedFile), encoding: .utf8) else { return }
                                 defer { selectedFile.stopAccessingSecurityScopedResource() }
                                 players.players = Player.dataToStructGeneric(data: data)
+                                var newPlayers:[CKRecord] = []
+                                for player in players.players {
+                                    let newrec = Player(Name: player.Name, myID: player.myID)!
+                                    newPlayers.append(newrec.record)
+                                }
+                                CloudKitUtility.saveAllRecords(newPlayers)
                             } else {
                                 // Handle denied access
                             }
@@ -128,21 +172,28 @@ struct csvExportImport: View {
                     }
                 }
         }
-        .hiddenConditionally(players.players.count == 0, remove: true)
         Group {
         Divider()
                 .overlay(Color.red)
 
                 VStack(spacing: 0) {
-                    Text("There are \(games.games.count) boards on file")
+                    Text("There are \(games.games.count) games on file")
                     Text("\(Game.example1().csvHeadingLine)")
                     myButton(action: {
-                        showingGameExporter.toggle()
+                        games.fetchAllRestricted = false
+//                        sm.isLoading = true
+                        games.fetchAll() { rtnMessage in
+                            returnedMessage = rtnMessage
+                            games.sectionDictionary = [:]
+                            games.sectionDictionary = games.getSectionedDictionary()
+                            sm.isLoading = false
+                            showingGameExporter.toggle()
+                        }
                     }, content: {
                         Text("Export Games")
                     }, width: buttonWidth
                     )
-                    .fileMover(isPresented: $showingGameExporter, file: fileURLGame()) { result in
+                    .fileMover(isPresented: $showingGameExporter, file: games.games[0].csvfileURL(from: games.games, outFile: "Games.csv")) { result in
                         switch result {
                         case .success(let url):
                             print("Saved to \(url)")
@@ -151,7 +202,17 @@ struct csvExportImport: View {
                         }
                     }
                     myButton(action: {
-                        showingGameImporter.toggle()
+                        var myGames = [Game]()
+                        let predicate = NSPredicate(value: true)
+                        CloudKitUtility.getAllRecordsAndDelete(predicate: predicate, recordType: myRecordType.Game.rawValue)
+                            .receive(on: DispatchQueue.main)
+                            .sink { _ in
+                                print("delete count = \(myGames.count)")
+                                showingGameImporter.toggle()
+                            } receiveValue: { returnedGames in
+                                myGames = returnedGames
+                            }
+                            .store(in: &cancellables)
                     }, content: {
                         Text("Import Games")
                     }, width: buttonWidth
@@ -167,6 +228,12 @@ struct csvExportImport: View {
                                 guard let data = String(data: try Data(contentsOf: selectedFile), encoding: .utf8) else { return }
                                 defer { selectedFile.stopAccessingSecurityScopedResource() }
                                 games.games = Game.dataToStructGeneric(data: data)
+                                var newGames:[CKRecord] = []
+                                for game in games.games {
+                                    let newrec = Game(BoardID: game.BoardID, Board: game.Board, DatePlayed: game.DatePlayed, WinnerID: game.WinnerID, Player1ID: game.Player1ID, Score1: game.Score1, Player2ID: game.Player2ID, Score2: game.Score2, myID: game.myID)!
+                                    newGames.append(newrec.record)
+                                }
+                                CloudKitUtility.saveAllRecords(newGames)
                             } else {
                                 // Handle denied access
                             }
@@ -181,7 +248,6 @@ struct csvExportImport: View {
 
                 }
         }
-        .hiddenConditionally(games.games.count == 0)
         Divider()
             .overlay(Color.red)
     }
@@ -191,6 +257,7 @@ struct csvExportImport: View {
 struct csvExportImport_Previews: PreviewProvider {
     static var previews: some View {
         csvExportImport()
+            .environmentObject(StateManager())
             .environmentObject(Boards())
             .environmentObject(Players())
             .environmentObject(Games())
@@ -199,8 +266,7 @@ struct csvExportImport_Previews: PreviewProvider {
 
 extension csvExportImport {
     func fileURLPlayer() -> URL? {
-        // FIXME: working on the generic createCSV function for a player or board
-        Player.createCSVPlayer(from: players.players, outFile: "Players.csv")
+        Player.createCSV(from: players.players, outFile: "Players.csv")
         let fileManager = FileManager.default
         do {
             let path = try fileManager.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -212,7 +278,7 @@ extension csvExportImport {
         }
     }
     func fileURLBoard() -> URL? {
-        Board.createCSVBoard(from: boards.boards, outFile: "Boards.csv")
+        Board.createCSV(from: boards.boards, outFile: "Boards.csv")
         let fileManager = FileManager.default
         do {
             let path = try fileManager.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
@@ -224,7 +290,7 @@ extension csvExportImport {
         }
     }
     func fileURLGame() -> URL? {
-        Game.createCSVGame(from: games.games, outFile: "Games.csv")
+        Game.createCSV(from: games.games, outFile: "Games.csv")
         let fileManager = FileManager.default
         do {
             let path = try fileManager.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)

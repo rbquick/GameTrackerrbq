@@ -16,7 +16,7 @@ struct GameEntryView: View {
     @State private var score1: Double = 0
     @State private var score2: Double = 0
 
-
+    let isTracing: Bool = true
     let pickerWidth = 260
     @State private var opacity = 1.0
     @State var showBanana = false
@@ -116,20 +116,16 @@ struct GameEntryView: View {
                                                 .fontWeight(.bold)
                                             Text("Games Played: \(games.GlistGames.count)")
                                                 .fontWeight(.bold)
-                                            Text("\(players.getName(myID: games.player1ID)) won: \(games.player1TotalGamesWon.count)")
-                                            Text("\(players.getName(myID: games.player2ID)) won: \(games.player2TotalGamesWon.count)")
+                                            Text("\(players.getName(myID: games.player1ID)) won: \(games.player1TotalGamesWon)")
+                                            Text("\(players.getName(myID: games.player2ID)) won: \(games.player2TotalGamesWon)")
                                             Text("Rubbers won")
                                                 .fontWeight(.bold)
 
                                             Text("\(players.getName(myID: games.player1ID)) won: \(games.rubbersPlayer1Total)")
                                             Text("\(players.getName(myID: games.player2ID)) won: \(games.rubbersPlayer2Total)")
                                             myButton(action: {
-                                                games.fetchAllRestricted = false
                                                 sm.isLoading = true
-                                                games.fetchSelective(board: games.boardID, player1ID: games.player1ID, player2ID: games.player2ID) { rtnMessage in
-                                                    returnedMessage = rtnMessage
-                                                    games.sectionDictionary = [:]
-                                                    games.sectionDictionary = games.getSectionedDictionary()
+                                                fetchSelectedGames() { completion in
                                                     sm.isLoading = false
                                                 }
                                             }) {
@@ -148,8 +144,8 @@ struct GameEntryView: View {
             }
 
             GameEntrySelect
-            Text("games.count \(games.games.count) games.GlistGames.count \(games.GlistGames.count)")
-
+//            Text("games.count \(games.games.count) games.GlistGames.count \(games.GlistGames.count)")
+// TODAY
             if !GameEntryShowing {
                 ListGames
             }
@@ -158,7 +154,7 @@ struct GameEntryView: View {
         }
         .onAppear() {
 
-            players.BlankAdd()
+//            players.BlankAdd()
 
             setInitialGame()
 
@@ -181,17 +177,33 @@ struct GameEntry_Previews: PreviewProvider {
 
 extension GameEntryView {
     func setInitialGame() {
-        if games.games.count > 0 {
-            games.player1 = String(games.games[0].Player1ID)
-            games.player2 = String(games.games[0].Player2ID)
-            winner = games.player1
-            games.board = String(games.games[0].BoardID)
-            myBoard =  boards.boards.first(where: {$0.myID == games.boardID}) ?? Board(Name: "Unknown", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 0, myID: 0)!
-        }
-        print("setInitialGame DONE")
-//        CountRubbers()
-    }
+                    if games.games.count > 0 {
+                        games.player1 = String(games.games[0].Player1ID)
+                        games.player2 = String(games.games[0].Player2ID)
+                        winner = games.player1
+                        games.board = String(games.games[0].BoardID)
+                        myBoard =  boards.boards.first(where: {$0.myID == games.boardID}) ?? Board(Name: "Unknown", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 0, myID: 0)!
+                    }
 
+        print("\(Date()):setInitialGame DONE")
+        //        CountRubbers()
+    }
+    func fetchSelectedGames(_ completion: @escaping (String) -> ()) {
+        games.fetchSelective(board: MyDefaults().BoardID, player1ID: MyDefaults().Player1ID, player2ID: MyDefaults().Player2ID) {
+            rtnMessage in
+//            returnedMessage = rtnMessage
+//            games.sectionDictionary = [:]
+//            games.sectionDictionary = games.getSectionedDictionary()
+//            if games.games.count > 0 {
+//                games.player1 = String(games.games[0].Player1ID)
+//                games.player2 = String(games.games[0].Player2ID)
+//                winner = games.player1
+//                games.board = String(games.games[0].BoardID)
+//                myBoard =  boards.boards.first(where: {$0.myID == games.boardID}) ?? Board(Name: "Unknown", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 0, myID: 0)!
+//            }
+            completion("FetchSectedGames done")
+        }
+    }
 
     private var GameSelection: some View {
         VStack {
@@ -205,22 +217,34 @@ extension GameEntryView {
             .onChange(of: games.board) { selection in
                 //rbq boardID = Int64(board) ?? 910
                 myBoard =  boards.boards.first(where: {$0.myID == games.boardID}) ?? Board(Name: "Unknown", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 0, myID: 0)!
+                MyDefaults().BoardID = myBoard.myID
                 setPlayersForBoard(board: myBoard)
-                fillSelectedGames()
+//                fillSelectedGames()
             }
+        }
+    }
+
+    func tracing(function: String) {
+        if isTracing {
+            print("\(Date()):Players \(function) ")
+            Logger.log("Players \(function)")
         }
     }
     func fillSelectedGames() {
         games.fetchAllRestricted = false
+        // TODAY
         sm.isLoading = true
         games.fetchSelective(board: games.boardID, player1ID: games.player1ID, player2ID: games.player2ID) { rtnMessage in
             returnedMessage = rtnMessage
             games.sectionDictionary = [:]
             games.sectionDictionary = games.getSectionedDictionary()
+            tracing(function: "\(Date()): GameEntryView FillSelectedGames SectionDictionary")
             sm.isLoading = false
         }
     }
     func setPlayersForBoard(board: Board) {
+        // I do not want to do this anymore since the games now only contain the initially selected board and players
+        return
         let thisGame = games.findFirstForBoard(board: board)
         games.player1 = String(thisGame.Player1ID)
         games.player2 = String(thisGame.Player2ID)
@@ -238,7 +262,8 @@ extension GameEntryView {
                     }
                     .myButtonViewStyle(width: CGFloat(pickerWidth))
                     .onChange(of: games.player1) { selection in
-                        fillSelectedGames()
+                        MyDefaults().Player1ID = players.getmyIDFromStringID(myID: selection)
+//                        fillSelectedGames()
                     }
                 }
 
@@ -251,7 +276,8 @@ extension GameEntryView {
                     }
                     .myButtonViewStyle(width: CGFloat(pickerWidth))
                     .onChange(of: games.player2) { selection in
-                        fillSelectedGames()
+                        MyDefaults().Player2ID = players.getmyIDFromStringID(myID: selection)
+//                        fillSelectedGames()
                     }
                 }
             }
@@ -439,14 +465,14 @@ extension GameEntryView {
         GeometryReader { geo in
             ScrollView(.vertical) {
                 LazyVStack {
-                    ForEach(games.GlistGames.indices, id:\.self) { idx in
+                    ForEach(games.games.indices, id:\.self) { idx in
                         myButton(action: {
-                            myGame = games.GlistGames[idx]
-                            restore(game: games.GlistGames[idx])
+                            myGame = games.games[idx]
+                            restore(game: games.games[idx])
                             returnedMessage = "Changing a game"
                             GameEntryEditingIdx = idx
                             GameEntryShowing.toggle()
-                        }, content: { GameLineView(game: games.GlistGames[idx])}, width: geo.size.width, height: 51)
+                        }, content: { GameLineView(game: games.games[idx])}, width: geo.size.width, height: 51)
 
 
                     }

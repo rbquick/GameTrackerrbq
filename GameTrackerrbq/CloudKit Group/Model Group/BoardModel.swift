@@ -23,7 +23,7 @@ class Boards: ObservableObject {
     var isTracing: Bool = false
     func tracing(function: String) {
         if isTracing {
-            print("Boards \(function) ")
+            print("\(Date()):Boards \(function) ")
             Logger.log("Boards \(function)")
         }
     }

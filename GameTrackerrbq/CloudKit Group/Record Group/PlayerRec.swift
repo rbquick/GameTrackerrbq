@@ -43,7 +43,6 @@ struct Player: Identifiable, CloudKitableProtocol, CSVLoadable {
         return csvHeading(fieldNames: fieldNames)
     }
 
-
     func update(Name: String) -> Player? {
         let record = record
         record[StructNames.myID.rawValue] = Name
