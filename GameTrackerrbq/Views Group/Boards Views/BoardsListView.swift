@@ -28,7 +28,7 @@ struct BoardsListView: View {
             }
             ScrollView {
                 ForEach(boards.sectionDictionary.keys.sorted(), id:\.self) { key in
-                    if let contacts = boards.sectionDictionary[key]!.filter({ (contact) -> Bool in
+                    if let contacts = boards.sectionDictionary[key]?.filter({ (contact) -> Bool in
                         self.searchTerm.isEmpty ? true :
                         "\(contact)".lowercased().contains(self.searchTerm.lowercased())}), !contacts.isEmpty
                     {

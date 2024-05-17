@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		710FADD92B6EC90D00945F60 /* myShake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710FADD82B6EC90C00945F60 /* myShake.swift */; };
 		71AF14CB294D3A5F006FD2C8 /* GameTrackerrbqApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF14CA294D3A5F006FD2C8 /* GameTrackerrbqApp.swift */; };
 		71AF14CD294D3A5F006FD2C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF14CC294D3A5F006FD2C8 /* ContentView.swift */; };
 		71AF14CF294D3A61006FD2C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71AF14CE294D3A61006FD2C8 /* Assets.xcassets */; };
@@ -55,12 +56,14 @@
 		71AF153B2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF153A2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift */; };
 		71AF153D29526656006FD2C8 /* ParticlesModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF153C29526656006FD2C8 /* ParticlesModifier.swift */; };
 		71AF153F29526751006FD2C8 /* FireworkParticlesContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF153E29526751006FD2C8 /* FireworkParticlesContentView.swift */; };
+		71BC04062BA3847E001C49F1 /* versionAndBuildNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BC04052BA3847E001C49F1 /* versionAndBuildNumber.swift */; };
 		71D089272B1A09CB00385B33 /* csvHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D089262B1A09CB00385B33 /* csvHeading.swift */; };
 		71D089292B1A0DAF00385B33 /* csvFileHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D089282B1A0DAF00385B33 /* csvFileHandling.swift */; };
 		71D0892B2B1A2EB700385B33 /* csvExportImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D0892A2B1A2EB700385B33 /* csvExportImport.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		710FADD82B6EC90C00945F60 /* myShake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myShake.swift; sourceTree = "<group>"; };
 		71AF14C7294D3A5F006FD2C8 /* GameTrackerrbq.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameTrackerrbq.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71AF14CA294D3A5F006FD2C8 /* GameTrackerrbqApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTrackerrbqApp.swift; sourceTree = "<group>"; };
 		71AF14CC294D3A5F006FD2C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -110,6 +113,7 @@
 		71AF153A2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworkParticlesGeometryEffect.swift; sourceTree = "<group>"; };
 		71AF153C29526656006FD2C8 /* ParticlesModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticlesModifier.swift; sourceTree = "<group>"; };
 		71AF153E29526751006FD2C8 /* FireworkParticlesContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworkParticlesContentView.swift; sourceTree = "<group>"; };
+		71BC04052BA3847E001C49F1 /* versionAndBuildNumber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = versionAndBuildNumber.swift; sourceTree = "<group>"; };
 		71D089262B1A09CB00385B33 /* csvHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = csvHeading.swift; sourceTree = "<group>"; };
 		71D089282B1A0DAF00385B33 /* csvFileHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = csvFileHandling.swift; sourceTree = "<group>"; };
 		71D0892A2B1A2EB700385B33 /* csvExportImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = csvExportImport.swift; sourceTree = "<group>"; };
@@ -182,6 +186,7 @@
 		71AF14E5294E05EF006FD2C8 /* MyStuff */ = {
 			isa = PBXGroup;
 			children = (
+				71BC04052BA3847E001C49F1 /* versionAndBuildNumber.swift */,
 				71D089252B1A097A00385B33 /* csvGroup */,
 				71AF14E6294E05EF006FD2C8 /* Logging.swift */,
 				71AF14E7294E05EF006FD2C8 /* StateManager.swift */,
@@ -197,6 +202,7 @@
 				71AF14F5294E05EF006FD2C8 /* myDateFormatter.swift */,
 				71AF14F6294E05EF006FD2C8 /* SectionHeader.swift */,
 				71AF1540295267D5006FD2C8 /* Fireworks */,
+				710FADD82B6EC90C00945F60 /* myShake.swift */,
 			);
 			path = MyStuff;
 			sourceTree = "<group>";
@@ -401,6 +407,7 @@
 				71AF1533294E0617006FD2C8 /* GamesMaintenanceView.swift in Sources */,
 				71AF151C294E0609006FD2C8 /* BoardRec.swift in Sources */,
 				71AF14F8294E05EF006FD2C8 /* StateManager.swift in Sources */,
+				71BC04062BA3847E001C49F1 /* versionAndBuildNumber.swift in Sources */,
 				71D089292B1A0DAF00385B33 /* csvFileHandling.swift in Sources */,
 				71AF14FF294E05EF006FD2C8 /* SearchBar.swift in Sources */,
 				71AF1534294E0617006FD2C8 /* PlayersGamesView.swift in Sources */,
@@ -410,6 +417,7 @@
 				71AF14FB294E05EF006FD2C8 /* PopoverLink.swift in Sources */,
 				71AF14E4294E057A006FD2C8 /* ReportingView.swift in Sources */,
 				71AF14CD294D3A5F006FD2C8 /* ContentView.swift in Sources */,
+				710FADD92B6EC90D00945F60 /* myShake.swift in Sources */,
 				71AF153D29526656006FD2C8 /* ParticlesModifier.swift in Sources */,
 				71AF151D294E0609006FD2C8 /* GameRec.swift in Sources */,
 				71AF153F29526751006FD2C8 /* FireworkParticlesContentView.swift in Sources */,
@@ -572,7 +580,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = GameTrackerrbq/GameTrackerrbq.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"GameTrackerrbq/Preview Content\"";
 				DEVELOPMENT_TEAM = 37U896T65Y;
 				ENABLE_PREVIEWS = YES;
@@ -602,7 +610,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = GameTrackerrbq/GameTrackerrbq.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"GameTrackerrbq/Preview Content\"";
 				DEVELOPMENT_TEAM = 37U896T65Y;
 				ENABLE_PREVIEWS = YES;

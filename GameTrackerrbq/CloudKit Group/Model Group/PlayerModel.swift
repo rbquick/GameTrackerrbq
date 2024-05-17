@@ -90,6 +90,7 @@ class Players: ObservableObject {
             .store(in: &cancellables)
     }
     func getName(myID: Int64) -> String {
+        if players.count == 0 { return "UnKnown"}
         var idx = 0
         if let index = players.firstIndex(where: {$0.myID == myID}) {
             idx = index
@@ -101,6 +102,7 @@ class Players: ObservableObject {
 
     }
     func getmyIDFromStringID(myID: String) -> Int64 {
+        if players.count == 0 { return Int64(0) }
         var idx = 0
         if let index = players.firstIndex(where: {$0.myID == Int64(myID)}) {
             idx = index

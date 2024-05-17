@@ -18,6 +18,7 @@ struct PlayersListView: View {
         VStack {
             HStack {
                 SearchBar(searchTerm: $searchTerm)
+                Text("current version  \(versionAndBuildNumber())")
                 PopoverLink(destination:
                                 PlayersMaintenanceView(myPlayer: Player(Name: "", myID: 0)!, PlayerEntryNewPlayer: true),
                             title: "New Player",
@@ -28,7 +29,7 @@ struct PlayersListView: View {
             }
             ScrollView {
                 ForEach(players.sectionDictionary.keys.sorted(), id:\.self) { key in
-                    if let contacts = players.sectionDictionary[key]!.filter({ (contact) -> Bool in
+                    if let contacts = players.sectionDictionary[key]?.filter({ (contact) -> Bool in
                         self.searchTerm.isEmpty ? true :
                         "\(contact)".lowercased().contains(self.searchTerm.lowercased())}), !contacts.isEmpty
                     {

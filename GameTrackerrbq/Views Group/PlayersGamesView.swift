@@ -33,7 +33,7 @@ struct PlayersGamesView: View {
             }
             ScrollView {
                 ForEach(sectionDictionary.keys.sorted(), id:\.self) { key in
-                    if let contacts = sectionDictionary[key]!.filter({ (contact) -> Bool in
+                    if let contacts = sectionDictionary[key]?.filter({ (contact) -> Bool in
                         self.searchTerm.isEmpty ?
                         true :
                         "\(contact)".lowercased().contains(self.searchTerm.lowercased())}), !contacts.isEmpty
