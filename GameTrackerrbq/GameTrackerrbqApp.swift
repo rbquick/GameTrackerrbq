@@ -12,6 +12,7 @@ struct GameTrackerrbqApp: App {
     @StateObject var sm = StateManager()
     @StateObject var boards = Boards()
     @StateObject var games = Games()
+    @StateObject var bmm = BoardMessages()
     @StateObject var players = Players()
     var body: some Scene {
         WindowGroup {
@@ -20,6 +21,7 @@ struct GameTrackerrbqApp: App {
                 .environmentObject(sm)
                 .environmentObject(boards)
                 .environmentObject(games)
+                .environmentObject(bmm)
                 .environmentObject(players)
         }
     }

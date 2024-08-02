@@ -36,6 +36,14 @@ struct MaintenanceView: View {
                         .myButtonViewStyle()
                 }.myButtonViewStyle()
                 PopoverLink(destination:
+                                BoardMessageView(),
+                            title: "BoardMessageView",
+                            subtitle: "BoardMessageView"
+                ) {
+                    Text("Messages")
+                        .myButtonViewStyle()
+                }.myButtonViewStyle()
+                PopoverLink(destination:
                                 GamesListView(),
                             title: "Games",
                             subtitle: "Games"

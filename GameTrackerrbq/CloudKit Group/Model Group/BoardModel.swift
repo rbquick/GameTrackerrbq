@@ -35,6 +35,13 @@ class Boards: ObservableObject {
         sectionDictionary = [:]
         sectionDictionary = getSectionedDictionary()
     }
+    // screen input fields are strings and then accessing fields are Int64
+    @Published var board: String = "1" {
+        didSet {
+            self.boardID = Int64(board) ?? 1
+        }
+    }
+    @Published var boardID: Int64 = 1
     func rebuildDictionary() {
         boards.sort {
             $0.Name < $1.Name
@@ -156,7 +163,7 @@ class Boards: ObservableObject {
             .sink { c in
                 switch c {
                 case .finished:
-                    self.tracing(function: "add .finished")
+                    self.tracing(function: "delete .finished")
                     completion("Board deleted")
                 case .failure(let error):
                     self.tracing(function: "change error = \(error.localizedDescription)")

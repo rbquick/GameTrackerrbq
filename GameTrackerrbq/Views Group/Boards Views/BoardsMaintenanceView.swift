@@ -22,8 +22,7 @@ struct BoardsMaintenanceView: View {
     @State private var minScore: Double = 0
     @State private var maxScoreStr: String = ""
     @State private var maxScore: Double = 0
-
-
+    var pickerWidth = 260
 
     @EnvironmentObject var boards: Boards
     @Environment(\.presentationMode) var presentationMode

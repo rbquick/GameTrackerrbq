@@ -18,6 +18,7 @@ struct MenuDriver: View {
     @EnvironmentObject var sm: StateManager
     @EnvironmentObject var players: Players
     @EnvironmentObject var boards: Boards
+    @EnvironmentObject var bmm: BoardMessages
     @EnvironmentObject var games: Games
     // 2022-02-04 deleted?
 //    @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -95,6 +96,10 @@ struct MenuDriver: View {
             if games.rubbersPlayer1Today > 0 || games.rubbersPlayer2Today > 0 {
                 FireworkParticlesContentView()
             }
+            if games.boardmessagemsgtext != "" {
+                TextSpinner(msgText: $games.boardmessagemsgtext, visibleDuration: 5)
+            }
+                
             if sm.isLoading  {
 
                         ProgressView("Connecting")
@@ -129,6 +134,7 @@ struct MenuDriver_Previews: PreviewProvider {
             .environmentObject(Players())
             .environmentObject(Boards())
             .environmentObject(Games())
+            .environmentObject(BoardMessages())
     }
 }
 extension MenuDriver {
@@ -141,6 +147,9 @@ extension MenuDriver {
 //            }
 
             sm.isLoading = true
+            bmm.fetchAll { rtnMessage in
+                returnedMessage = rtnMessage
+            }
             players.fetchAll() { rtnMessage in
                 returnedMessage = rtnMessage
                 players.sectionDictionary = [:]

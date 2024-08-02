@@ -9,6 +9,7 @@ import Foundation
 
 enum myRecordType : String {
     case Board
+    case BoardMessage
     case Game
     case Player
 }

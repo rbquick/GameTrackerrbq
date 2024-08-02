@@ -15,7 +15,12 @@ struct GameEntryView: View {
     @State private var datePlayed: Date = Date()
     @State private var score1: Double = 0
     @State private var score2: Double = 0
-
+    @State private var msgtext: String = ""
+    @State private var selectedBoardName: String = ""
+    
+    @State private var angle: Double = 360  // Initial rotation angle for one clockwise revolution
+    @State private var scale: CGFloat = 1.0
+    
     let isTracing: Bool = true
     let pickerWidth = 260
     @State private var opacity = 1.0
@@ -48,6 +53,7 @@ struct GameEntryView: View {
     @State private var GameEntryEditingIdx: Int = 0
     @State private var GameEntryShowing: Bool = false
     @State private var GameEntryNewGame: Bool = false
+   
     private var GameEntryCanShow: Bool {
         if games.player1.isEmpty || games.player2.isEmpty {
             return false
@@ -72,6 +78,7 @@ struct GameEntryView: View {
     }
     @EnvironmentObject var sm: StateManager
     @EnvironmentObject var boards: Boards
+    @EnvironmentObject var bmm: BoardMessages
     @EnvironmentObject var games: Games
     @EnvironmentObject var players: Players
 
@@ -170,6 +177,7 @@ struct GameEntry_Previews: PreviewProvider {
         GameEntryView()
             .environmentObject(StateManager())
             .environmentObject(Boards())
+            .environmentObject(BoardMessages())
             .environmentObject(Games())
             .environmentObject(Players())
     }
@@ -183,6 +191,7 @@ extension GameEntryView {
                         winner = games.player1
                         games.board = String(games.games[0].BoardID)
                         myBoard =  boards.boards.first(where: {$0.myID == games.boardID}) ?? Board(Name: "Unknown", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 0, myID: 0)!
+                        selectedBoardName = myBoard.Name
                     }
 
         print("\(Date()):setInitialGame DONE")
@@ -218,6 +227,7 @@ extension GameEntryView {
                 //rbq boardID = Int64(board) ?? 910
                 myBoard =  boards.boards.first(where: {$0.myID == games.boardID}) ?? Board(Name: "Unknown", GameType: gametype.twoPlayer.rawValue, minScore: 0, maxScore: 0, myID: 0)!
                 MyDefaults().BoardID = myBoard.myID
+                selectedBoardName = myBoard.Name
                 setPlayersForBoard(board: myBoard)
 //                fillSelectedGames()
             }
@@ -289,7 +299,7 @@ extension GameEntryView {
             VStack{
                 if GameEntryShowing {
                     Spacer()
-                    Text("\(boards.getName(myID: games.boardID))")
+                    Text("\(selectedBoardName)")
                     Spacer()
                 }
             HStack {
@@ -331,7 +341,7 @@ extension GameEntryView {
                         } else {
                             change()
                         }
-
+                        games.boardmessagemsgtext = bmm.getmsgtext(boardname: selectedBoardName, score: score1 < score2 ? score1 : score2)
                         GameEntryNewGame = false
                         GameEntryShowing.toggle()
 
@@ -377,6 +387,24 @@ extension GameEntryView {
         VStack {
             Divider()
             Text("Pick a winner")
+        // the following comments are kept for the development of the TextSpinner view
+//            Button {
+//                games.boardmessagemsgtext = bmm.getmsgtext(boardname: selectedBoardName, score: score1 < score2 ? score1 : score2)
+//            } label: {
+//                Text("check results")
+//            }
+//            TextSpinner(msgText: games.boardmessagemsgtext)
+//            Text("\(games.boardmessagemsgtext)")
+//                .rotationEffect(.degrees(angle))  // Apply initial rotation
+//                .scaleEffect(scale)
+//                .onChange(of: msgtext, perform: { newValue in
+//                    withAnimation(Animation.linear(duration: 1.5).repeatCount(5, autoreverses: false)) {
+//                        angle = angle == 360 ? -360 : 360  // Alternate between two angles
+////                        scale = scale == 1.0 ? 2.0 : 1.0  // Alternate between original size and expanded size
+////                        scale = Double.random(in: 0.5...2.5)
+//                        scale = angle / 100
+//                    }
+//                })
             HStack {
                 AdaptiveView {
                     HStack {

@@ -56,6 +56,12 @@
 		71AF153B2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF153A2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift */; };
 		71AF153D29526656006FD2C8 /* ParticlesModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF153C29526656006FD2C8 /* ParticlesModifier.swift */; };
 		71AF153F29526751006FD2C8 /* FireworkParticlesContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF153E29526751006FD2C8 /* FireworkParticlesContentView.swift */; };
+		71B3FD782C594F2500A8FB50 /* checkCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3FD772C594F2500A8FB50 /* checkCondition.swift */; };
+		71B3FD7A2C59512D00A8FB50 /* BoardMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3FD792C59512D00A8FB50 /* BoardMessage.swift */; };
+		71B3FD7C2C597BF800A8FB50 /* BoardMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3FD7B2C597BF800A8FB50 /* BoardMessageModel.swift */; };
+		71B3FD7F2C59880300A8FB50 /* BoardMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3FD7E2C59880300A8FB50 /* BoardMessageView.swift */; };
+		71B3FD812C5993C400A8FB50 /* BoardMessageMaintenanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3FD802C5993C400A8FB50 /* BoardMessageMaintenanceView.swift */; };
+		71B3FD9D2C5CF63100A8FB50 /* TextSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B3FD9C2C5CF63000A8FB50 /* TextSpinner.swift */; };
 		71BC04062BA3847E001C49F1 /* versionAndBuildNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BC04052BA3847E001C49F1 /* versionAndBuildNumber.swift */; };
 		71D089272B1A09CB00385B33 /* csvHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D089262B1A09CB00385B33 /* csvHeading.swift */; };
 		71D089292B1A0DAF00385B33 /* csvFileHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D089282B1A0DAF00385B33 /* csvFileHandling.swift */; };
@@ -113,6 +119,12 @@
 		71AF153A2952660C006FD2C8 /* FireworkParticlesGeometryEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworkParticlesGeometryEffect.swift; sourceTree = "<group>"; };
 		71AF153C29526656006FD2C8 /* ParticlesModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticlesModifier.swift; sourceTree = "<group>"; };
 		71AF153E29526751006FD2C8 /* FireworkParticlesContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworkParticlesContentView.swift; sourceTree = "<group>"; };
+		71B3FD772C594F2500A8FB50 /* checkCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = checkCondition.swift; sourceTree = "<group>"; };
+		71B3FD792C59512D00A8FB50 /* BoardMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardMessage.swift; sourceTree = "<group>"; };
+		71B3FD7B2C597BF800A8FB50 /* BoardMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardMessageModel.swift; sourceTree = "<group>"; };
+		71B3FD7E2C59880300A8FB50 /* BoardMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardMessageView.swift; sourceTree = "<group>"; };
+		71B3FD802C5993C400A8FB50 /* BoardMessageMaintenanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardMessageMaintenanceView.swift; sourceTree = "<group>"; };
+		71B3FD9C2C5CF63000A8FB50 /* TextSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSpinner.swift; sourceTree = "<group>"; };
 		71BC04052BA3847E001C49F1 /* versionAndBuildNumber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = versionAndBuildNumber.swift; sourceTree = "<group>"; };
 		71D089262B1A09CB00385B33 /* csvHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = csvHeading.swift; sourceTree = "<group>"; };
 		71D089282B1A0DAF00385B33 /* csvFileHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = csvFileHandling.swift; sourceTree = "<group>"; };
@@ -203,6 +215,8 @@
 				71AF14F6294E05EF006FD2C8 /* SectionHeader.swift */,
 				71AF1540295267D5006FD2C8 /* Fireworks */,
 				710FADD82B6EC90C00945F60 /* myShake.swift */,
+				71B3FD772C594F2500A8FB50 /* checkCondition.swift */,
+				71B3FD9C2C5CF63000A8FB50 /* TextSpinner.swift */,
 			);
 			path = MyStuff;
 			sourceTree = "<group>";
@@ -251,6 +265,7 @@
 				71AF150E294E0609006FD2C8 /* PlayerModel.swift */,
 				71AF150F294E0609006FD2C8 /* BoardModel.swift */,
 				71AF1510294E0609006FD2C8 /* GameModel.swift */,
+				71B3FD7B2C597BF800A8FB50 /* BoardMessageModel.swift */,
 			);
 			path = "Model Group";
 			sourceTree = "<group>";
@@ -262,6 +277,7 @@
 				71AF1514294E0609006FD2C8 /* GameRec.swift */,
 				71AF1515294E0609006FD2C8 /* PlayerRec.swift */,
 				71AF1516294E0609006FD2C8 /* myRecordType.swift */,
+				71B3FD792C59512D00A8FB50 /* BoardMessage.swift */,
 			);
 			path = "Record Group";
 			sourceTree = "<group>";
@@ -269,6 +285,7 @@
 		71AF1520294E0617006FD2C8 /* Views Group */ = {
 			isa = PBXGroup;
 			children = (
+				71B3FD7D2C5987E300A8FB50 /* BoardMessage */,
 				71AF1521294E0617006FD2C8 /* Players Views */,
 				71AF1524294E0617006FD2C8 /* Games Views */,
 				71AF1528294E0617006FD2C8 /* PlayersGamesView.swift */,
@@ -315,6 +332,15 @@
 				71AF153E29526751006FD2C8 /* FireworkParticlesContentView.swift */,
 			);
 			path = Fireworks;
+			sourceTree = "<group>";
+		};
+		71B3FD7D2C5987E300A8FB50 /* BoardMessage */ = {
+			isa = PBXGroup;
+			children = (
+				71B3FD7E2C59880300A8FB50 /* BoardMessageView.swift */,
+				71B3FD802C5993C400A8FB50 /* BoardMessageMaintenanceView.swift */,
+			);
+			path = BoardMessage;
 			sourceTree = "<group>";
 		};
 		71D089252B1A097A00385B33 /* csvGroup */ = {
@@ -405,6 +431,7 @@
 			files = (
 				71AF14E2294E057A006FD2C8 /* MenuDriver.swift in Sources */,
 				71AF1533294E0617006FD2C8 /* GamesMaintenanceView.swift in Sources */,
+				71B3FD7F2C59880300A8FB50 /* BoardMessageView.swift in Sources */,
 				71AF151C294E0609006FD2C8 /* BoardRec.swift in Sources */,
 				71AF14F8294E05EF006FD2C8 /* StateManager.swift in Sources */,
 				71BC04062BA3847E001C49F1 /* versionAndBuildNumber.swift in Sources */,
@@ -413,6 +440,8 @@
 				71AF1534294E0617006FD2C8 /* PlayersGamesView.swift in Sources */,
 				71AF1535294E0617006FD2C8 /* ColorMaintenanceView.swift in Sources */,
 				71AF1536294E0617006FD2C8 /* BoardsMaintenanceView.swift in Sources */,
+				71B3FD7C2C597BF800A8FB50 /* BoardMessageModel.swift in Sources */,
+				71B3FD7A2C59512D00A8FB50 /* BoardMessage.swift in Sources */,
 				71AF1502294E05EF006FD2C8 /* MyTextField.swift in Sources */,
 				71AF14FB294E05EF006FD2C8 /* PopoverLink.swift in Sources */,
 				71AF14E4294E057A006FD2C8 /* ReportingView.swift in Sources */,
@@ -437,6 +466,7 @@
 				71D089272B1A09CB00385B33 /* csvHeading.swift in Sources */,
 				71AF152F294E0617006FD2C8 /* PlayersListView.swift in Sources */,
 				71AF1517294E0609006FD2C8 /* Model.swift in Sources */,
+				71B3FD812C5993C400A8FB50 /* BoardMessageMaintenanceView.swift in Sources */,
 				71AF150A294E05FD006FD2C8 /* myColors.swift in Sources */,
 				71AF151F294E0609006FD2C8 /* myRecordType.swift in Sources */,
 				71AF14FD294E05EF006FD2C8 /* ButtonModifiers.swift in Sources */,
@@ -447,12 +477,14 @@
 				71AF151E294E0609006FD2C8 /* PlayerRec.swift in Sources */,
 				71AF1505294E05EF006FD2C8 /* SectionHeader.swift in Sources */,
 				71AF1532294E0617006FD2C8 /* GamesListView.swift in Sources */,
+				71B3FD9D2C5CF63100A8FB50 /* TextSpinner.swift in Sources */,
 				71AF14FE294E05EF006FD2C8 /* myGradients.swift in Sources */,
 				71AF1539294E0617006FD2C8 /* ColorDefaults.swift in Sources */,
 				71AF1509294E05FD006FD2C8 /* MyDefaults.swift in Sources */,
 				71AF14FC294E05EF006FD2C8 /* PopoverBarView.swift in Sources */,
 				71AF1519294E0609006FD2C8 /* BoardModel.swift in Sources */,
 				71AF14CB294D3A5F006FD2C8 /* GameTrackerrbqApp.swift in Sources */,
+				71B3FD782C594F2500A8FB50 /* checkCondition.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

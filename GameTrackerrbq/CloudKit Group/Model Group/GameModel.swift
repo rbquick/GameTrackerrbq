@@ -22,6 +22,7 @@ class Games: ObservableObject, Equatable {
     @Published var canDeleteGame: Bool = false
     @Published var fetchAllRestricted: Bool = false
     @Published var fetchAllRestrictedCount: Int = 5
+    @Published var boardmessagemsgtext: String = ""
 
     // screen input fields are strings and then accessing fields are Int64
     @Published var board: String = "1" {
