@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TextSpinner: View {
     @Binding var msgText: String
-    @State private var angle: Double = 360  // Initial rotation angle for one clockwise revolution
+    @State private var angle: Double = -360  // Initial rotation angle for one clockwise revolution
     @State private var scale: CGFloat = 1.0
     var visibleDuration: Double
     
