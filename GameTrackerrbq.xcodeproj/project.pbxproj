@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		710FADD92B6EC90D00945F60 /* myShake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710FADD82B6EC90C00945F60 /* myShake.swift */; };
+		7176CBA82CBFED300038AC0A /* GameLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7176CBA72CBFED300038AC0A /* GameLineView.swift */; };
 		71AF14CB294D3A5F006FD2C8 /* GameTrackerrbqApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF14CA294D3A5F006FD2C8 /* GameTrackerrbqApp.swift */; };
 		71AF14CD294D3A5F006FD2C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71AF14CC294D3A5F006FD2C8 /* ContentView.swift */; };
 		71AF14CF294D3A61006FD2C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71AF14CE294D3A61006FD2C8 /* Assets.xcassets */; };
@@ -70,6 +71,7 @@
 
 /* Begin PBXFileReference section */
 		710FADD82B6EC90C00945F60 /* myShake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myShake.swift; sourceTree = "<group>"; };
+		7176CBA72CBFED300038AC0A /* GameLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLineView.swift; sourceTree = "<group>"; };
 		71AF14C7294D3A5F006FD2C8 /* GameTrackerrbq.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameTrackerrbq.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71AF14CA294D3A5F006FD2C8 /* GameTrackerrbqApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTrackerrbqApp.swift; sourceTree = "<group>"; };
 		71AF14CC294D3A5F006FD2C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -308,6 +310,7 @@
 		71AF1524294E0617006FD2C8 /* Games Views */ = {
 			isa = PBXGroup;
 			children = (
+				7176CBA72CBFED300038AC0A /* GameLineView.swift */,
 				71AF1525294E0617006FD2C8 /* GameEntryView.swift */,
 				71AF1526294E0617006FD2C8 /* GamesListView.swift */,
 				71AF1527294E0617006FD2C8 /* GamesMaintenanceView.swift */,
@@ -432,6 +435,7 @@
 				71AF14E2294E057A006FD2C8 /* MenuDriver.swift in Sources */,
 				71AF1533294E0617006FD2C8 /* GamesMaintenanceView.swift in Sources */,
 				71B3FD7F2C59880300A8FB50 /* BoardMessageView.swift in Sources */,
+				7176CBA82CBFED300038AC0A /* GameLineView.swift in Sources */,
 				71AF151C294E0609006FD2C8 /* BoardRec.swift in Sources */,
 				71AF14F8294E05EF006FD2C8 /* StateManager.swift in Sources */,
 				71BC04062BA3847E001C49F1 /* versionAndBuildNumber.swift in Sources */,

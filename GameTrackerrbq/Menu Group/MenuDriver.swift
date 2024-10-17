@@ -71,16 +71,19 @@ struct MenuDriver: View {
                 Text("New Game")
                     .onTapGesture {
                         sm.openingTabNumber = 1
+                        MyDefaults().openingTabNumber = 1
                     }
                 Spacer()
                 Text("Reporting")
                     .onTapGesture {
                         sm.openingTabNumber = 2
+                        MyDefaults().openingTabNumber = 2
                     }
                 Spacer()
                 Text("Maintenance")
                     .onTapGesture {
                         sm.openingTabNumber = 3
+                        MyDefaults().openingTabNumber = 3
                     }
                 Spacer()
             }

@@ -159,7 +159,7 @@ class Games: ObservableObject, Equatable {
 
     var cancellables = Set<AnyCancellable>()
 
-    var isTracing: Bool = true
+    var isTracing: Bool = false
     func tracing(function: String) {
         if isTracing {
             print("\(Date()):Games \(function) ")
@@ -389,5 +389,28 @@ func getSectionedDictionary() -> Dictionary <String , [Game]> {
             thisGame = Game(BoardID: 0, Board: "Unknown", DatePlayed: Date(), WinnerID: 0, Player1ID: 1, Score1: 0, Player2ID: 1, Score2: 0, myID: 0)
         }
         return thisGame!
+    }
+    func getLastGameForBoard(board: Int64, _ completion: @escaping (Game) -> ()) {
+        tracing(function: "getLastGameForBoard")
+        var lastRecord = [Game]()
+        let predicate = NSPredicate(format: "BoardID == %@", NSNumber(value: board))
+        let sort = [NSSortDescriptor(key: "DatePlayed", ascending: false)]
+        CloudKitUtility.fetchOne(predicate: predicate, recordType: myRecordType.Game.rawValue, sortDescriptions: sort, resultsLimit: 1)
+            .receive(on: DispatchQueue.main)
+            .sink {  c in
+                switch c {
+                case .finished:
+                    if lastRecord.count > 0 {
+                        return completion(lastRecord[0])
+                    } else {
+                        return completion(Game(BoardID: 2, Board: "Unknown", DatePlayed: Date(), WinnerID: 4, Player1ID: 4, Score1: 1, Player2ID: 6, Score2: 0, myID: 0)!)
+                    }
+                case .failure(let error):
+                    self.tracing(function: "getLastGameForBoard error = \(error.localizedDescription)")
+                }
+            } receiveValue: { returnedItems in
+                lastRecord = returnedItems
+            }
+            .store(in: &cancellables)
     }
 }

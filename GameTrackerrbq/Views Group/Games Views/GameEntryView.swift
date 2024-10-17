@@ -194,7 +194,7 @@ extension GameEntryView {
                         selectedBoardName = myBoard.Name
                     }
 
-        print("\(Date()):setInitialGame DONE")
+        games.tracing(function: "\(Date()):GameEntryView.setInitialGame DONE")
         //        CountRubbers()
     }
     func fetchSelectedGames(_ completion: @escaping (String) -> ()) {
@@ -254,10 +254,13 @@ extension GameEntryView {
     }
     func setPlayersForBoard(board: Board) {
         // I do not want to do this anymore since the games now only contain the initially selected board and players
-        return
-        let thisGame = games.findFirstForBoard(board: board)
-        games.player1 = String(thisGame.Player1ID)
-        games.player2 = String(thisGame.Player2ID)
+//        return
+        games.getLastGameForBoard(board: board.myID) { thisGame in
+            games.player1 = String(thisGame.Player1ID)
+            games.player1ID = Int64(thisGame.Player1ID)
+            games.player2 = String(thisGame.Player2ID)
+            games.player2ID = Int64(thisGame.Player2ID)
+        }
     }
     private var PlayerSelection: some View {
         VStack{
@@ -272,7 +275,7 @@ extension GameEntryView {
                     }
                     .myButtonViewStyle(width: CGFloat(pickerWidth))
                     .onChange(of: games.player1) { selection in
-                        MyDefaults().Player1ID = players.getmyIDFromStringID(myID: selection)
+                        MyDefaults().Player1ID = Int64(selection)!
 //                        fillSelectedGames()
                     }
                 }
@@ -286,7 +289,7 @@ extension GameEntryView {
                     }
                     .myButtonViewStyle(width: CGFloat(pickerWidth))
                     .onChange(of: games.player2) { selection in
-                        MyDefaults().Player2ID = players.getmyIDFromStringID(myID: selection)
+                        MyDefaults().Player2ID = Int64(selection)!
 //                        fillSelectedGames()
                     }
                 }
@@ -523,29 +526,5 @@ extension GameEntryView {
     }
 }
 
-struct GameLineView: View {
-    var game: Game
-    @EnvironmentObject var players: Players
-    var body: some View {
 
-        AdaptiveView {
-            HStack {
-                Text("\(myDateFormatter(inDate: game.DatePlayed, outFormat: "yyyy-MM-dd")) ... \(game.Board)")
-                Text("\(players.getName(myID: game.Player1ID)) - \(players.getName(myID: game.Player2ID))")
-            }
-            HStack {
-                Text("Winner is \(Text("\(players.getName(myID: game.WinnerID))").foregroundColor(Color.red))   \(game.Score1, specifier: "%.0f")-\(game.Score2, specifier: "%.0f")")
-            }
-        }
-        .myBackgroundStyle()
-        //.listRowBackground(myListRowBackgroundView())
-    }
-}
-struct myListRowBackgroundView: View {
-    var body: some View {
-        Rectangle()
-        //.cornerRadius(50)
-            .opacity(0)
-            .background(LinearGradient(gradient: Gradient(colors: [Color(MyDefaults().gradientDefaults[1]), Color(MyDefaults().gradientDefaults[0])]), startPoint: .top, endPoint: .bottom))
-    }
-}
+

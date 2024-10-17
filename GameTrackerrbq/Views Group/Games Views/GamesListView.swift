@@ -103,7 +103,6 @@ extension GamesListView {
                 }
             }
             .myBackgroundStyle()
-            //.listRowBackground(myListRowBackgroundView())
         }
     }
 }

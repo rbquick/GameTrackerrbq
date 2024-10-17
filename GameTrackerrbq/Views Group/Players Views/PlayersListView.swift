@@ -41,7 +41,7 @@ struct PlayersListView: View {
                                                 title: "Player Change",
                                                 subtitle: "Player Change"
                                     ) {
-                                        Text("\(value.Name)")
+                                        Text("\(value.Name) ID: \(value.myID)")
                                         //.myButtonViewStyle()
                                     }.myButtonViewStyle()
                                 }

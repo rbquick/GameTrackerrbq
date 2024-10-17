@@ -12,7 +12,7 @@ import Combine
 class BoardMessages:  ObservableObject {
     @Published var messages = [BoardMessage]()
     var cancellables = Set<AnyCancellable>()
-    var isTracing: Bool = true
+    var isTracing: Bool = false
     func tracing(function: String) {
         if isTracing {
             print("\(Date()):BoardMessages \(function) ")

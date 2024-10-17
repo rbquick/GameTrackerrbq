@@ -1,3 +1,11 @@
+//
+//  GameLineView.swift
+//  GameTrackerrbq
+//
+//  Created by Brian Quick on 2024-10-16.
+//
+
+
 import SwiftUI
 import AlertKit
 
@@ -16,6 +24,5 @@ struct GameLineView: View {
             }
         }
         .myBackgroundStyle()
-        //.listRowBackground(myListRowBackgroundView())
     }
 }
