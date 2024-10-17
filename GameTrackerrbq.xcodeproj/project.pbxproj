@@ -72,6 +72,7 @@
 /* Begin PBXFileReference section */
 		710FADD82B6EC90C00945F60 /* myShake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myShake.swift; sourceTree = "<group>"; };
 		7176CBA72CBFED300038AC0A /* GameLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLineView.swift; sourceTree = "<group>"; };
+		7176CBA92CC148300038AC0A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		71AF14C7294D3A5F006FD2C8 /* GameTrackerrbq.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameTrackerrbq.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71AF14CA294D3A5F006FD2C8 /* GameTrackerrbqApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTrackerrbqApp.swift; sourceTree = "<group>"; };
 		71AF14CC294D3A5F006FD2C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -164,6 +165,7 @@
 		71AF14C9294D3A5F006FD2C8 /* GameTrackerrbq */ = {
 			isa = PBXGroup;
 			children = (
+				7176CBA92CC148300038AC0A /* Info.plist */,
 				71AF1520294E0617006FD2C8 /* Views Group */,
 				71AF150B294E0609006FD2C8 /* CloudKit Group */,
 				71AF1506294E05FD006FD2C8 /* Dependant Stuff */,
@@ -621,6 +623,7 @@
 				DEVELOPMENT_TEAM = 37U896T65Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GameTrackerrbq/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -651,6 +654,7 @@
 				DEVELOPMENT_TEAM = 37U896T65Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GameTrackerrbq/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
