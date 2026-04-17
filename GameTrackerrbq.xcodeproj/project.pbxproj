@@ -72,7 +72,7 @@
 /* Begin PBXFileReference section */
 		710FADD82B6EC90C00945F60 /* myShake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myShake.swift; sourceTree = "<group>"; };
 		7176CBA72CBFED300038AC0A /* GameLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLineView.swift; sourceTree = "<group>"; };
-		7176CBA92CC148300038AC0A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		7176CBA92CC148300038AC0A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71AF14C7294D3A5F006FD2C8 /* GameTrackerrbq.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameTrackerrbq.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71AF14CA294D3A5F006FD2C8 /* GameTrackerrbqApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTrackerrbqApp.swift; sourceTree = "<group>"; };
 		71AF14CC294D3A5F006FD2C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -633,11 +633,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codewithbrian.GameTrackerrbq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -664,11 +664,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codewithbrian.GameTrackerrbq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -14,7 +14,7 @@ struct BoardMessageView: View {
         VStack {
             HStack {
                 SearchBar(searchTerm: $searchTerm)
-
+                
                 PopoverLink(destination:
                                 BoardMessageMaintenanceView(myMessage: BoardMessage.example1(), boardmessageNewEntry: true),
                             title: "New Message",
@@ -23,20 +23,21 @@ struct BoardMessageView: View {
                     Text("\(Image(systemName: "plus.circle.fill")) Board")
                 }.myButtonViewStyle(width:90)
             }
-        }
+        
         ScrollView {
             ForEach(bmm.messages.indices, id: \.self) { ind in
                 HStack {
                     PopoverLink(destination:
                                     BoardMessageMaintenanceView(myMessage: bmm.messages[ind], boardmessageNewEntry: false),
-                                                title: "New Message",
-                                                subtitle: "New Message"
+                                title: "New Message",
+                                subtitle: "New Message"
                     ) {
                         Text("\(bmm.messages[ind].boardName) \(bmm.messages[ind].relation) \(Int(bmm.messages[ind].score)) \(bmm.messages[ind].msgtext)")
                     }
                 }
             }
         }
+    }
     }
 }
 
