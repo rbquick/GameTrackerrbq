@@ -16,7 +16,7 @@ struct GameLineView: View {
 
         AdaptiveView {
             HStack {
-                Text("\(myDateFormatter(inDate: game.DatePlayed, outFormat: "yyyy-MM-dd")) ... \(game.Board)")
+                Text("\(myDateFormatter(inDate: game.DatePlayed, outFormat: "yyyy-MM-dd HH:mm")) ... \(game.Board)")
                 Text("\(players.getName(myID: game.Player1ID)) - \(players.getName(myID: game.Player2ID))")
             }
             HStack {
